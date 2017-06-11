@@ -1,0 +1,162 @@
+/*
+ * Globals
+ */
+
+/* Links */
+a,
+a:focus,
+a:hover {
+  color: #fff;
+}
+
+/* Custom default button */
+.btn-default,
+.btn-default:hover,
+.btn-default:focus {
+  color: #333;
+  text-shadow: none; /* Prevent inheritence from `body` */
+  background-color: #fff;
+  border: 1px solid #fff;
+}
+
+
+/*
+ * Base structure
+ */
+
+html,
+body {
+  height: 100%;
+  background-color: #333;
+}
+body {
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 1px 3px rgba(0,0,0,.5);
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1.1em;
+}
+
+.nounderline{text-decoration: none !important}
+
+h1 {
+font-size: 1.5em;
+}
+
+h4 {
+font-size: 1.2em;
+}
+
+p {
+font-size: 1.3em;
+}
+
+.lead {
+font-size: 1.4em;
+}
+
+.table > thead > tr > th{
+    text-align: center;
+    border: 0;
+}
+thead tr {
+    border: 0;
+}
+
+td {
+border-top: 1px solid #777;
+border-color: #777;
+}
+
+tr {
+border-top: 1px solid #777;
+border-color: #777;
+}
+
+.mg20 {margin-top: 20px;}
+
+.left {float: left;}
+
+/* Extra markup and styles for table-esque vertical and horizontal centering */
+.wrapper {
+  width: 100%;
+  height: 100%; /* For at least Firefox */
+  min-height: 100%;
+  -webkit-box-shadow: inset 0 0 100px rgba(0,0,0,.5);
+          box-shadow: inset 0 0 100px rgba(0,0,0,.5);
+}
+.inner-wrapper {
+    position: relative;
+    height: auto;
+    min-height: 100%;
+    margin: 0 auto;
+    width: 100%;
+    padding-top: 100px;
+    box-shadow: 0 0 50px rgba(0,0,0,0.8);
+}
+
+.fix:after {
+    display: block;
+    content: "";
+    clear: both;
+    visibility: hidden;
+}
+
+@media (min-width: 768px) {
+  .cover-container {
+    width: 100%; /* Must be percentage or pixels for horizontal alignment */
+  }
+}
+
+@media (min-width: 992px) {
+  .masthead,
+  .mastfoot,
+  .cover-container {
+    width: 800px;
+  }
+}
+
+.inner {
+  padding: 30px;
+}
+
+.cover-container {
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.cover {
+  padding: 0 20px;
+}
+.cover .btn-lg {
+  padding: 10px 20px;
+  font-weight: bold;
+}
+
+.result {
+    color: #00CC00; 
+    text-align: left; 
+    font-size: 1.5em; 
+    line-height: 2.7em;
+}
+
+.nav-btn {
+    text-align: right;
+    margin: 10px 0;
+}
+
+.nav-btn a {
+    display: inline-block;
+    padding: .3em .6em .3em;
+}
+
+.title {
+    color: #ddd; 
+    font-family: 'Courier New', Courier, monospace; 
+    text-align: left;
+}
+
+.table-his {
+    max-height: 380px;
+    overflow: auto;
+}

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/dns.css">
+    <link rel="stylesheet" href="./css/jquery-jvectormap-2.0.3.css">
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="inner-wrapper">
+            <div class="container fix">
+                <div class="cover-container">
+                    <div class="inner cover">
+                        <h1 class="cover-heading">子域名分析系统</h1>
+                        <div class="form-group mg20 fix">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-6">
+                                <input class="form-control" type="text" placeholder="exampledomain.com" name="targetip" id="regularInput">
+                            </div>
+                            <button type="submit" class="btn btn-default left">Search <span class="glyphicon glyphicon-chevron-right"></span></button>
+                        </div>
+                        <h4 class="result"><span style="font-weight: 700;">vip.com</span> 的查询结果 :</h4>
+                        <div class="nav-btn">
+                            <a href="" class="label label-default">DNS Servers</a>
+                            <a href="" class="label label-default">Host (A) Records</a>
+                            <a href="" class="label label-default">Domain Map</a>
+                        </div>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <p class="title">IP历史解析记录</p>
+                                    <div class="table-his">
+                                        <table class="table" style="font-size: 1.1em; border-color: #777;">
+                                            <thead>
+                                                <tr>
+                                                    <th>IP</th>
+                                                    <th>时间</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="col-md-6">101.251.216.209<br><span style="font-size: 0.9em; color: #eee;"></span></td>
+                                                    <td class="col-md-6">1992.04.23-2001.04.23</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="col-md-6">101.251.216.209<br><span style="font-size: 0.9em; color: #eee;"></span></td>
+                                                    <td class="col-md-6">1992.04.23-2001.04.23</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="col-md-6">101.251.216.209<br><span style="font-size: 0.9em; color: #eee;"></span></td>
+                                                    <td class="col-md-6">1992.04.23-2001.04.23</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="col-md-6">101.251.216.209<br><span style="font-size: 0.9em; color: #eee;"></span></td>
+                                                    <td class="col-md-6">1992.04.23-2001.04.23</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="col-md-6">101.251.216.209<br><span style="font-size: 0.9em; color: #eee;"></span></td>
+                                                    <td class="col-md-6">1992.04.23-2001.04.23</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <p style="color: #ddd; font-family: 'Courier New', Courier, monospace; text-align: left; padding-left: 30px;">服务器地理位置</p>
+                                    <div id="world-map" style="width: 480px; height: 380px"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="title">Whois 信息</p>
+                            <div class="table-responsive" style="text-align: left;">
+                                <table class="table" style="font-size: 1.1em; border-color: #777;">
+
+                                    <tbody>
+                                        <tr>
+                                            <td class="col-md-4">ns11.vip.com.<br>
+                                                <a class="external nounderline" data-toggle="modal" href="https://api.hackertarget.com/reverseiplookup/?q=101.251.216.209"
+                                                    data-target="#myModal"><span class="glyphicon glyphicon-th" data-toggle="tooltip" data-placement="top" title="" data-original-title="Find hosts (A records) sharing this IP address"></span></a>
+                                                <a class="external nounderline" data-toggle="modal" href="https://api.hackertarget.com/httpheaders/?q=" data-target="#myModal"><span class="glyphicon glyphicon-globe" data-toggle="tooltip" data-placement="top" title="" data-original-title="Get HTTP Headers from IP address"></span></a>
+                                                <a class="external nounderline" data-toggle="modal" href="https://api.hackertarget.com/mtr/?q=101.251.216.209" data-target="#myModal"><span class="glyphicon glyphicon-random" data-toggle="tooltip" data-placement="top" title="" data-original-title="Trace path to IP address using MTR"></span></a>                                                <a class="external nounderline" data-toggle="modal" href="https://api.hackertarget.com/findshareddns/?q=ns11.vip.com."
+                                                    data-target="#myModal"><span class="glyphicon glyphicon-cloud-download" data-toggle="tooltip" data-placement="top" title="" data-original-title="Find hosts sharing this DNS server"></span></a>
+                                            </td>
+                                            <td class="col-md-3">101.251.216.209<br><span style="font-size: 0.9em; color: #eee;"></span></td>
+                                            <td class="col-md-3">AS4808 China Unicom Beijing Province Network<br><span style="font-size: 0.9em; color: #eee;">China</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="title">子域名<span style="font-size: 0.8em; color: #777;"> ** 数据可能不是最新，来自静态数据库(每周更新)</span></p>
+                            <div class="table-responsive" style="text-align: left;">
+                                <table class="table" style="font-size: 1.1em; border-color: #777;">
+
+                                    <tbody>
+                                        <tr>
+                                            <td class="col-md-4">ns11.vip.com.<br>
+                                                <a class="external nounderline" data-toggle="modal" href="https://api.hackertarget.com/reverseiplookup/?q=101.251.216.209"
+                                                    data-target="#myModal"><span class="glyphicon glyphicon-th" data-toggle="tooltip" data-placement="top" title="" data-original-title="Find hosts (A records) sharing this IP address"></span></a>
+                                                <a class="external nounderline" data-toggle="modal" href="https://api.hackertarget.com/httpheaders/?q=" data-target="#myModal"><span class="glyphicon glyphicon-globe" data-toggle="tooltip" data-placement="top" title="" data-original-title="Get HTTP Headers from IP address"></span></a>
+                                                <a class="external nounderline" data-toggle="modal" href="https://api.hackertarget.com/mtr/?q=101.251.216.209" data-target="#myModal"><span class="glyphicon glyphicon-random" data-toggle="tooltip" data-placement="top" title="" data-original-title="Trace path to IP address using MTR"></span></a>                                                <a class="external nounderline" data-toggle="modal" href="https://api.hackertarget.com/findshareddns/?q=ns11.vip.com."
+                                                    data-target="#myModal"><span class="glyphicon glyphicon-cloud-download" data-toggle="tooltip" data-placement="top" title="" data-original-title="Find hosts sharing this DNS server"></span></a>
+                                            </td>
+                                            <td class="col-md-3">101.251.216.209<br><span style="font-size: 0.9em; color: #eee;"></span></td>
+                                            <td class="col-md-3">AS4808 China Unicom Beijing Province Network<br><span style="font-size: 0.9em; color: #eee;">China</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div style="margin: 30px;" align="center"><a href=""><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-download" aria-hidden="true"></span> 下载子域名列表文件</button></a></div>
+                        <div>
+                            <svg width="200" height="200">
+                                <circle fill="#3E5693" cx="50" cy="120" r="20" />
+                                <text x="100" y="100">Hello SVG!</text>
+                                <path d="M100,10L150,70L50,70Z" fill="#BEDBC3" stroke="#539E91" stroke-width="3">
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+    <script src="./js/jquery-jvectormap-2.0.3.min.js"></script>
+    <script src=".js/jquery-jvectormap-world-mill-en.js"></script>
+    <script src="./js/d3.min.js"></script>
+    <script>
+        var gdpData = {
+
+            "CN": 2,
+
+            "US": 4,
+
+        };
+        $(function () {
+            $('#world-map').vectorMap({
+                map: 'world_mill_en',
+                backgroundColor: '#333333',
+                zoomButtons: false,
+                series: {
+                    regions: [{
+                        values: gdpData,
+                        scale: ['#00CC00', '#008400'],
+                        normalizeFunction: 'polynomial'
+                    }]
+                },
+                onRegionTipShow: function (e, el, code) {
+                    if (typeof gdpData[code] !== "undefined") {
+                        el.html(el.html() + ' <br>Hosts Found : ' + gdpData[code]);
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
