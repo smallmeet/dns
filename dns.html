@@ -9,9 +9,28 @@
     <link rel="stylesheet" href="./css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/dns.css">
     <link rel="stylesheet" href="./css/jquery-jvectormap-2.0.3.css">
+    <link rel="stylesheet" href="./css/flag.css">
+    <link rel="stylesheet" href="./css/font-awesome.min.css">
 </head>
 
 <body>
+    <div class="header-wrapper">
+        <div class="header">
+            <div class="header-inner" data-toggle="dropdown" class="dropdown-toggle">
+                <div class="mini-avatar">
+                    <img src="./img/avatar.png" alt="avatar">
+                </div>
+                <span>tom</span>
+                <b class="caret"></b>
+                <!--<button id="logout" class="btn btn-primary" type="button">登出</button>-->
+            </div>
+            <ul class="dropdown-menu extended logout">
+                <div class="log-arrow-up"></div>
+                <li><a href="#" data-toggle="modal" data-target="#myModalpw"><i class="fa fa-unlock"></i> 修改密码</a></li>
+                <li><a id="logout" href="#"><i class="fa fa-unlink"></i> 登出</a></li>
+            </ul>
+        </div>
+    </div>
     <div class="wrapper">
         <div class="inner-wrapper">
             <div class="container fix">
@@ -31,65 +50,73 @@
                             <a href="" class="label label-default">Host (A) Records</a>
                             <a href="" class="label label-default">Domain Map</a>
                         </div>
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <p class="title">IP历史解析记录</p>
-                                    <div class="table-his">
-                                        <table class="table" style="font-size: 1.1em; border-color: #777;">
-                                            <thead>
-                                                <tr>
-                                                    <th>IP</th>
-                                                    <th>时间</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td class="col-md-6">101.251.216.209<br><span style="font-size: 0.9em; color: #eee;"></span></td>
-                                                    <td class="col-md-6">1992.04.23-2001.04.23</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="col-md-6">101.251.216.209<br><span style="font-size: 0.9em; color: #eee;"></span></td>
-                                                    <td class="col-md-6">1992.04.23-2001.04.23</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="col-md-6">101.251.216.209<br><span style="font-size: 0.9em; color: #eee;"></span></td>
-                                                    <td class="col-md-6">1992.04.23-2001.04.23</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="col-md-6">101.251.216.209<br><span style="font-size: 0.9em; color: #eee;"></span></td>
-                                                    <td class="col-md-6">1992.04.23-2001.04.23</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="col-md-6">101.251.216.209<br><span style="font-size: 0.9em; color: #eee;"></span></td>
-                                                    <td class="col-md-6">1992.04.23-2001.04.23</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
+                        <div class="map fix">
+                            <div class="col-md-6">
+                                <p class="title">IP历史解析记录</p>
+                                <div class="table-his">
+                                    <table class="table" style="font-size: 1.1em; border-color: #777;">
+                                        <thead>
+                                            <tr>
+                                                <th>IP</th>
+                                                <th>时间</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="col-md-6">101.251.216.209<br><span style="font-size: 0.9em; color: #eee;"></span></td>
+                                                <td class="col-md-6">1992.04.23-2001.04.23</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="col-md-6">101.251.216.209<br><span style="font-size: 0.9em; color: #eee;"></span></td>
+                                                <td class="col-md-6">1992.04.23-2001.04.23</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="col-md-6">101.251.216.209<br><span style="font-size: 0.9em; color: #eee;"></span></td>
+                                                <td class="col-md-6">1992.04.23-2001.04.23</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="col-md-6">101.251.216.209<br><span style="font-size: 0.9em; color: #eee;"></span></td>
+                                                <td class="col-md-6">1992.04.23-2001.04.23</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="col-md-6">101.251.216.209<br><span style="font-size: 0.9em; color: #eee;"></span></td>
+                                                <td class="col-md-6">1992.04.23-2001.04.23</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
-                                <div class="col-md-8">
-                                    <p style="color: #ddd; font-family: 'Courier New', Courier, monospace; text-align: left; padding-left: 30px;">服务器地理位置</p>
-                                    <div id="world-map" style="width: 480px; height: 380px"></div>
-                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <p style="color: #ddd; font-family: 'Courier New', Courier, monospace; text-align: left; padding-left: 30px;">服务器地理位置</p>
+                                <div id="world-map" style="width: 420px; height: 330px"></div>
                             </div>
                         </div>
                         <div>
                             <p class="title">Whois 信息</p>
                             <div class="table-responsive" style="text-align: left;">
-                                <table class="table" style="font-size: 1.1em; border-color: #777;">
-
+                                <table class="table table-whois" style="font-size: 1.1em; border-color: #777;">
+                                    <thead>
+                                        <tr>
+                                            <th>Property</th>
+                                            <th>Value</th>
+                                        </tr>
+                                    </thead>
                                     <tbody>
                                         <tr>
-                                            <td class="col-md-4">ns11.vip.com.<br>
-                                                <a class="external nounderline" data-toggle="modal" href="https://api.hackertarget.com/reverseiplookup/?q=101.251.216.209"
-                                                    data-target="#myModal"><span class="glyphicon glyphicon-th" data-toggle="tooltip" data-placement="top" title="" data-original-title="Find hosts (A records) sharing this IP address"></span></a>
-                                                <a class="external nounderline" data-toggle="modal" href="https://api.hackertarget.com/httpheaders/?q=" data-target="#myModal"><span class="glyphicon glyphicon-globe" data-toggle="tooltip" data-placement="top" title="" data-original-title="Get HTTP Headers from IP address"></span></a>
-                                                <a class="external nounderline" data-toggle="modal" href="https://api.hackertarget.com/mtr/?q=101.251.216.209" data-target="#myModal"><span class="glyphicon glyphicon-random" data-toggle="tooltip" data-placement="top" title="" data-original-title="Trace path to IP address using MTR"></span></a>                                                <a class="external nounderline" data-toggle="modal" href="https://api.hackertarget.com/findshareddns/?q=ns11.vip.com."
-                                                    data-target="#myModal"><span class="glyphicon glyphicon-cloud-download" data-toggle="tooltip" data-placement="top" title="" data-original-title="Find hosts sharing this DNS server"></span></a>
-                                            </td>
-                                            <td class="col-md-3">101.251.216.209<br><span style="font-size: 0.9em; color: #eee;"></span></td>
-                                            <td class="col-md-3">AS4808 China Unicom Beijing Province Network<br><span style="font-size: 0.9em; color: #eee;">China</span></td>
+                                            <td>updated_date</td>
+                                            <td>2014-09-23 00:00:00,2014-09-23 05:10:04</td>
+                                        </tr>
+                                        <tr>
+                                            <td>updated_date</td>
+                                            <td>2020-10-21 00:00:00,2020-10-21 11:37:37</td>
+                                        </tr>
+                                        <tr>
+                                            <td>address</td>
+                                            <td>PO Box 1769</td>
+                                        </tr>
+                                        <tr>
+                                            <td>whois_server</td>
+                                            <td>whois.name.com</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -98,19 +125,52 @@
                         <div>
                             <p class="title">子域名<span style="font-size: 0.8em; color: #777;"> ** 数据可能不是最新，来自静态数据库(每周更新)</span></p>
                             <div class="table-responsive" style="text-align: left;">
-                                <table class="table" style="font-size: 1.1em; border-color: #777;">
-
+                                <table class="table domain" style="font-size: 1.1em; border-color: #777;">
+                                    <thead>
+                                        <tr>
+                                            <th>Domain</th>
+                                            <th>Date</th>
+                                            <th>IP</th>
+                                            <th>Location</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
                                     <tbody>
                                         <tr>
-                                            <td class="col-md-4">ns11.vip.com.<br>
-                                                <a class="external nounderline" data-toggle="modal" href="https://api.hackertarget.com/reverseiplookup/?q=101.251.216.209"
-                                                    data-target="#myModal"><span class="glyphicon glyphicon-th" data-toggle="tooltip" data-placement="top" title="" data-original-title="Find hosts (A records) sharing this IP address"></span></a>
-                                                <a class="external nounderline" data-toggle="modal" href="https://api.hackertarget.com/httpheaders/?q=" data-target="#myModal"><span class="glyphicon glyphicon-globe" data-toggle="tooltip" data-placement="top" title="" data-original-title="Get HTTP Headers from IP address"></span></a>
-                                                <a class="external nounderline" data-toggle="modal" href="https://api.hackertarget.com/mtr/?q=101.251.216.209" data-target="#myModal"><span class="glyphicon glyphicon-random" data-toggle="tooltip" data-placement="top" title="" data-original-title="Trace path to IP address using MTR"></span></a>                                                <a class="external nounderline" data-toggle="modal" href="https://api.hackertarget.com/findshareddns/?q=ns11.vip.com."
+                                            <td class="col-md-3">ns11.vip.com.<br>
+                                                <a class="external nounderline" data-toggle="modal" href="" data-target="#myModal"><span class="glyphicon glyphicon-th" data-toggle="tooltip" data-placement="top" title="" data-original-title="Find hosts (A records) sharing this IP address"></span></a>
+                                                <a class="external nounderline" data-toggle="modal" href="" data-target="#myModal"><span class="glyphicon glyphicon-globe" data-toggle="tooltip" data-placement="top" title="" data-original-title="Get HTTP Headers from IP address"></span></a>
+                                                <a class="external nounderline" data-toggle="modal" href="" data-target="#myModal"><span class="glyphicon glyphicon-random" data-toggle="tooltip" data-placement="top" title="" data-original-title="Trace path to IP address using MTR"></span></a>                                                <a class="external nounderline" data-toggle="modal" href="https://api.hackertarget.com/findshareddns/?q=ns11.vip.com."
                                                     data-target="#myModal"><span class="glyphicon glyphicon-cloud-download" data-toggle="tooltip" data-placement="top" title="" data-original-title="Find hosts sharing this DNS server"></span></a>
                                             </td>
-                                            <td class="col-md-3">101.251.216.209<br><span style="font-size: 0.9em; color: #eee;"></span></td>
-                                            <td class="col-md-3">AS4808 China Unicom Beijing Province Network<br><span style="font-size: 0.9em; color: #eee;">China</span></td>
+                                            <td>17-05-31 15:20:58</td>
+                                            <td>101.251.216.209<br><span style="font-size: 0.9em; color: #eee;"></span></td>
+                                            <td><span class="flag flag-cn"></span></td>
+                                            <td><button data-ip="58.220.29.21" class="btn btn-danger btn-banner"><i class="fa fa-ban"></i> 域名不存在</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-md-3">ns11.vip.com.<br>
+                                                <a class="external nounderline" data-toggle="modal" href="" data-target="#myModal"><span class="glyphicon glyphicon-th" data-toggle="tooltip" data-placement="top" title="" data-original-title="Find hosts (A records) sharing this IP address"></span></a>
+                                                <a class="external nounderline" data-toggle="modal" href="" data-target="#myModal"><span class="glyphicon glyphicon-globe" data-toggle="tooltip" data-placement="top" title="" data-original-title="Get HTTP Headers from IP address"></span></a>
+                                                <a class="external nounderline" data-toggle="modal" href="" data-target="#myModal"><span class="glyphicon glyphicon-random" data-toggle="tooltip" data-placement="top" title="" data-original-title="Trace path to IP address using MTR"></span></a>                                                <a class="external nounderline" data-toggle="modal" href="https://api.hackertarget.com/findshareddns/?q=ns11.vip.com."
+                                                    data-target="#myModal"><span class="glyphicon glyphicon-cloud-download" data-toggle="tooltip" data-placement="top" title="" data-original-title="Find hosts sharing this DNS server"></span></a>
+                                            </td>
+                                            <td>17-05-31 15:20:58</td>
+                                            <td>101.251.216.209<br><span style="font-size: 0.9em; color: #eee;"></span></td>
+                                            <td><span class="flag flag-us"></span></td>
+                                            <td><button data-ip="222.186.35.81" class="btn btn-warning btn-banner"><i class="fa  fa-unlink"></i> 服务器无法访问</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-md-3">ns11.vip.com.<br>
+                                                <a class="external nounderline" data-toggle="modal" href="" data-target="#myModal"><span class="glyphicon glyphicon-th" data-toggle="tooltip" data-placement="top" title="" data-original-title="Find hosts (A records) sharing this IP address"></span></a>
+                                                <a class="external nounderline" data-toggle="modal" href="" data-target="#myModal"><span class="glyphicon glyphicon-globe" data-toggle="tooltip" data-placement="top" title="" data-original-title="Get HTTP Headers from IP address"></span></a>
+                                                <a class="external nounderline" data-toggle="modal" href="" data-target="#myModal"><span class="glyphicon glyphicon-random" data-toggle="tooltip" data-placement="top" title="" data-original-title="Trace path to IP address using MTR"></span></a>                                                <a class="external nounderline" data-toggle="modal" href="https://api.hackertarget.com/findshareddns/?q=ns11.vip.com."
+                                                    data-target="#myModal"><span class="glyphicon glyphicon-cloud-download" data-toggle="tooltip" data-placement="top" title="" data-original-title="Find hosts sharing this DNS server"></span></a>
+                                            </td>
+                                            <td>17-05-31 15:20:58</td>
+                                            <td>101.251.216.209<br><span style="font-size: 0.9em; color: #eee;"></span></td>
+                                            <td><span class="flag flag-jp"></span></td>
+                                            <td><button data-ip="222.186.35.81" class="btn btn-primary btn-banner"><i class="fa fa-send"></i> 正常</button></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -118,13 +178,53 @@
                         </div>
                         <div style="margin: 30px;" align="center"><a href=""><button type="button" class="btn btn-default"><span class="glyphicon glyphicon-download" aria-hidden="true"></span> 下载子域名列表文件</button></a></div>
                         <div>
-                            <svg width="200" height="200">
-                                <circle fill="#3E5693" cx="50" cy="120" r="20" />
+                            <!--<svg width="100%" height="450">
+                                <circle cx="50" cy="120" r="20" stroke-width="2" stroke="#D1D3D7" fill="none" />
+                                <rect x="0" y="0" width="100"  height="50" style="fill:none; stroke-width:1; stroke:blue" />
                                 <text x="100" y="100">Hello SVG!</text>
                                 <path d="M100,10L150,70L50,70Z" fill="#BEDBC3" stroke="#539E91" stroke-width="3">
-                            </svg>
+
+                                <g transform="translate(50,50)">
+                                    <text dominant-baseline="central">the last blo</text>
+                                    <rect x="-5" y="-18" width="100" height="36" fill="steelblue" fill-opacity="0.3" stroke="black" stroke-width="2"></rect>
+                                </g>
+                            </svg>-->
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="myModalpw" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">修改密码</h4>
+                </div>
+                <div class="modal-body form-horizontal">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">旧密码</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control" id="inputEmail3" placeholder="旧密码">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword3" class="col-sm-2 control-label">新密码</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" id="inputPassword3" placeholder="新密码">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword3" class="col-sm-2 control-label">确认密码</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" id="inputPassword3" placeholder="确认密码">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary">确定</button>
                 </div>
             </div>
         </div>
@@ -132,9 +232,10 @@
     <script src="./js/jquery.min.js"></script>
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/jquery-jvectormap-2.0.3.min.js"></script>
-    <script src=".js/jquery-jvectormap-world-mill-en.js"></script>
+    <script src="./js/jquery-jvectormap-world-mill-en.js"></script>
     <script src="./js/d3.min.js"></script>
     <script>
+        $("[data-toggle='tooltip']").tooltip();
         var gdpData = {
 
             "CN": 2,

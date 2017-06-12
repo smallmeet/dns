@@ -9,6 +9,10 @@ a:hover {
   color: #fff;
 }
 
+/** {
+    transform-origin: 0px 0px 0px;
+}*/
+
 /* Custom default button */
 .btn-default,
 .btn-default:hover,
@@ -26,13 +30,16 @@ a:hover {
 
 html,
 body {
+  width: auto;
   height: 100%;
+  min-height: 100%;
   background-color: #333;
 }
 body {
+  padding-top: 60px;
   color: #fff;
   text-align: center;
-  text-shadow: 0 1px 3px rgba(0,0,0,.5);
+  /*text-shadow: 0 1px 3px rgba(0,0,0,.5);*/
   font-family: 'Courier New', Courier, monospace;
   font-size: 1.1em;
 }
@@ -48,17 +55,31 @@ font-size: 1.2em;
 }
 
 p {
-font-size: 1.3em;
+font-size: 1.5em;
 }
 
 .lead {
 font-size: 1.4em;
 }
 
-.table > thead > tr > th{
+.table > thead > tr > th {
     text-align: center;
     border: 0;
 }
+
+.table > thead > tr > th {
+    text-align: center;
+    border: 0;
+}
+
+.domain > thead > tr > th {
+  text-align: left;
+}
+
+.table-whois > tbody > tr > td{
+    text-align: center;
+}
+
 thead tr {
     border: 0;
 }
@@ -77,6 +98,95 @@ border-color: #777;
 
 .left {float: left;}
 
+.header-wrapper {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  padding: 8px 20px;
+  background: #000;
+  text-align: left;
+  line-height: 44px;
+}
+
+.header-wrapper .logo {
+  width: 114px;
+  height: 24px;
+  vertical-align: middle;
+}
+
+.header {
+    /*position: fixed;*/
+    /*top: 10px;*/
+    /*right: 20px;*/
+    float: right;
+    padding: 4px;
+    border: 1px solid #999;
+    border-radius: 5px;
+}
+
+.header-inner {
+    line-height: 34px;
+    cursor: pointer;
+}
+
+.mini-avatar {
+    float: left;
+    height: 34px;
+    width: 34px;
+    margin-right: 10px;
+    font-size: 0;
+}
+
+.mini-avatar img {
+    height: 34px;
+}
+
+.header-inner span {
+    float: left;
+    margin-right: 10px;
+    font-size: 16px;
+    line-height: 34px;
+    text-align: center;
+}
+
+.dropdown-menu {
+    left: auto;
+    right: 0;
+}
+
+.log-arrow-up {
+    background: url(../img/arrow-up.png) no-repeat;
+    width: 20px;
+    height: 11px;
+    position: absolute;
+    right: 20px;
+    top: -10px;
+}
+
+#myModalpw {
+  color: black;
+  font-family: "Microsoft YaHei";
+  font-weight: lighter;
+}
+
+.content {
+  width: 100%;
+  height: 100%;
+  background: url("../img/bg.png") no-repeat;
+  background-position: bottom;
+}
+
+.search-inner {
+  padding-top: 200px;
+  text-align: center;
+}
+
+.search-inner img {
+  height: 110px;
+  width: 94px;
+}
 /* Extra markup and styles for table-esque vertical and horizontal centering */
 .wrapper {
   width: 100%;
@@ -92,7 +202,11 @@ border-color: #777;
     margin: 0 auto;
     width: 100%;
     padding-top: 100px;
-    box-shadow: 0 0 50px rgba(0,0,0,0.8);
+    /*box-shadow: 0 0 50px rgba(0,0,0,0.8);*/
+}
+
+.map {
+  margin-bottom: 20px;
 }
 
 .fix:after {
