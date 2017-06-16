@@ -1,0 +1,23 @@
+{
+  "dns_zone_transfer": true,
+  "modules": {
+    "alexa": true,
+    "baidu": true,
+    "bing": true,
+    "bugbank": true,
+    "crt": true,
+    "get_ssl": true,
+    "i_links": true,
+    "ip138": true,
+    "juanluo": true,
+    "netcraft": true,
+    "page_catcher": true,
+    "sitedossier": true,
+    "threatcrowd": true,
+    "threatminer": true,
+    "hack_target": true
+  },
+  "sub_domains_brute": true,
+
+  "db_name": "result"
+}

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ static_url('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ static_url('css/dns.css') }}">
+    <link rel="stylesheet" href="{{ static_url('css/jquery-jvectormap-2.0.3.css') }}">
+    <link rel="stylesheet" href="{{ static_url('css/flag.css') }}">
+    <link rel="stylesheet" href="{{ static_url('css/font-awesome.min.css') }}">
+</head>
+
+<body style="height:100%">
+    <div class="header-wrapper">
+        <img class="logo" src="{{ static_url('img/logo1.png') }}" alt="">
+        <span class="c_name">域名信息分析系统</span>
+        <div class="header">
+            <div class="header-inner" data-toggle="dropdown" class="dropdown-toggle">
+                <div class="mini-avatar">
+                    <img src="{{ static_url('img/avatar.png') }}" alt="avatar">
+                </div>
+                <span>tom</span>
+                <b class="caret"></b>
+                <!--<button id="logout" class="btn btn-primary" type="button">登出</button>-->
+            </div>
+            <ul class="dropdown-menu extended logout">
+                <div class="log-arrow-up"></div>
+                <li><a href="#" data-toggle="modal" data-target="#myModalpw"><i class="fa fa-unlock"></i> 修改密码</a></li>
+                <li><a id="logout" href="#"><i class="fa fa-unlink"></i> 登出</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="content fix">
+        <div class="search-inner">
+            <img src="{{ static_url('img/logo.png') }}" alt="">
+            <div class="form-group mg20 fix">
+                <div class="col-md-3 search-bar">
+                    <input id="input-content" class="form-control" type="text" placeholder="exampledomain.com" name="targetip" id="regularInput">
+                </div>
+                <button id="btn-query" type="submit" class="btn btn-default left">查询 <span class="glyphicon glyphicon-chevron-right"></span></button>
+            </div>
+        </div>
+    </div>
+    <div id="myModalpw" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">修改密码</h4>
+                </div>
+                <div class="modal-body form-horizontal">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">旧密码</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control" id="inputEmail3" placeholder="旧密码">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword3" class="col-sm-2 control-label">新密码</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" id="inputPassword3" placeholder="新密码">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword3" class="col-sm-2 control-label">确认密码</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" id="inputPassword3" placeholder="确认密码">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{{ static_url('js/jquery.min.js') }}"></script>
+    <script src="{{ static_url('js/bootstrap.min.js') }}"></script>
+    <script>
+        $('#btn-query').on('click', function() {
+            var inputContent = $('#input-content').val();
+            window.location.href = '/result_new?content=' + inputContent + '&dictionary=false';
+        });
+        $('body').keydown(function(e) {
+          if (e.keyCode == 13) {
+            $('#btn-query').click()
+          }
+        });
+    </script>
+</body>
+
+</html>

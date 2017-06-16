@@ -1,0 +1,31 @@
+.result-table {
+    table-layout: fixed;
+}
+.result-table td,
+.result-table th {
+    width: auto;
+}
+
+.td-date {
+    width: 140px;
+}
+.td-domain {
+    min-width: 200px;
+}
+.td-origin {
+    width: 80px;
+}
+.td-ip {
+    min-width: 200px;
+}
+.td-location {
+    width: 140px;
+}
+.td-state {
+    width: 110px;
+}
+
+#btn-output {
+    display: block;
+    margin: 10px 0;
+}

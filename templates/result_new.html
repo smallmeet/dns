@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ static_url('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ static_url('css/dns.css') }}">
+    <link rel="stylesheet" href="{{ static_url('css/jquery-jvectormap-2.0.3.css') }}">
+    <link rel="stylesheet" href="{{ static_url('css/flag.css') }}">
+    <link rel="stylesheet" href="{{ static_url('css/font-awesome.min.css') }}">
+</head>
+
+<body>
+    <div class="header-wrapper">
+        <img class="logo" src="{{ static_url('img/logo1.png') }}" alt="">
+        <span class="c_name">域名信息分析系统</span>
+        <div class="header">
+            <div class="header-inner" data-toggle="dropdown" class="dropdown-toggle">
+                <div class="mini-avatar">
+                    <img src="{{ static_url('img/avatar.png') }}" alt="avatar">
+                </div>
+                <span>tom</span>
+                <b class="caret"></b>
+                <!--<button id="logout" class="btn btn-primary" type="button">登出</button>-->
+            </div>
+            <ul class="dropdown-menu extended logout">
+                <div class="log-arrow-up"></div>
+                <li><a href="#" data-toggle="modal" data-target="#myModalpw"><i class="fa fa-unlock"></i> 修改密码</a></li>
+                <li><a id="logout" href="#"><i class="fa fa-unlink"></i> 登出</a></li>
+            </ul>
+        </div>
+    </div>
+<div class="wrapper">
+        <div class="inner-wrapper">
+            <div class="container fix">
+                <div class="cover-container">
+                    <div class="inner cover">
+                        <h1 class="cover-heading">域名信息分析系统</h1>
+                        <div class="form-group mg20 fix">
+                            <!--<div class="col-md-3"></div>-->
+                            <div class="col-md-6 mg_l25">
+                                <input class="form-control" type="text" placeholder="exampledomain.com" name="targetip" id="regularInput">
+                            </div>
+                            <button type="submit" class="btn btn-default left">查询 <span class="glyphicon glyphicon-chevron-right"></span></button>
+                        </div>
+                        <h4 class="result"><span style="font-weight: 700;">{{ target_domain }}</span> 的查询结果 :</h4>
+                        <div class="nav-btn">
+                            <!--<a href="#map" class="label label-default">历史解析记录</a>-->
+                            <a href="#whois" class="label label-default">Whois信息</a>
+                            <a href="#subdomain" class="label label-default">子域名</a>
+                        </div>
+                        <div id="map" class="map fix">
+                            <div class="col-md-6">
+                                <p class="title">IP历史解析记录</p>
+                                <div class="table-his">
+                                    <table class="table ip-histroy" style="font-size: 1.1em; border-color: #777;">
+                                        <thead>
+                                            <tr>
+                                                <th>IP</th>
+                                                <th>开始时间</th>
+                                                <th>结束时间</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <p style="color: #ddd; font-family: 'Courier New', Courier, monospace; text-align: left; padding-left: 30px;">服务器地理位置</p>
+                                <div id="world-map" style="width: 420px; height: 330px"></div>
+                            </div>
+                        </div>
+                        <div id="whois">
+                            <p class="title">Whois 信息</p>
+                            <div class="table-responsive" style="text-align: left;">
+                                <table class="table table-whois" style="font-size: 1.1em; border-color: #777;">
+                                    <thead>
+                                        <tr>
+                                            <th class="col-md-3">Property</th>
+                                            <th class="col-md-9">Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                                <h2 class="nowhois">没有匹配的子域名</h2>
+                            </div>
+                        </div>
+                        <div id="subdomain">
+                            <p class="title">子域名<span style="font-size: 0.8em; color: #777;"> ** 数据可能不是最新，来自静态数据库(每周更新)</span></p>
+                            <div class="input-group col-md-6">
+                                <div class="input-group-addon sort" disabled><i class="fa fa-sort-alpha-desc"></i> IP排序</div>
+                                <input type="text" class="form-control" id="filter_text" placeholder="输入域名允许的字符">
+                                <div class="input-group-addon filter" disabled><i class="fa fa-eraser"></i> 筛选</div>
+                            </div>
+                            <div class="table-responsive table2excel" style="text-align: left;">
+                                <table class="table domain" style="font-size: 1.1em; border-color: #777;">
+                                    <thead>
+                                        <tr>
+                                            <th>Domain</th>
+                                            <th>Date</th>
+                                            <th>IP</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                                <table class="table sort-table" style="font-size: 1.1em; border-color: #777;">
+                                    <thead>
+                                        <tr>
+                                            <th>IP</th>
+                                            <th>Date</th>
+                                            <th>Domain</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                                <h2 class="nofilter">没有匹配的子域名</h2>
+                            </div>
+                        </div>
+                        <div style="margin: 30px;" align="center"><button id="download" type="button" class="btn btn-default"><span class="glyphicon glyphicon-download" aria-hidden="true"></span> 下载子域名列表文件</button></div>
+                        <p class="title">Mapping the domain</p>
+                    </div>
+                </div>
+            </div>
+            <div id="svg"></div>
+
+        </div>
+    </div>
+    <button class="button go-top" type="button">
+        <svg width="16" height="16" viewBox="0 0 17 17" xmlns="http://www.w3.org/2000/svg" class="Icon Icon--backToTopArrow" aria-hidden="true" style="height: 16px; width: 16px; fill: #9aaabf;" >
+            <title>回到顶部</title>
+            <g>
+                <path d="M12.036 15.59c0 .55-.453.995-.997.995H5.032c-.55 0-.997-.445-.997-.996V8.584H1.03c-1.1 0-1.36-.633-.578-1.416L7.33.29c.39-.39 1.026-.385 1.412 0l6.878 6.88c.782.78.523 1.415-.58 1.415h-3.004v7.004z" fill-rule="evenodd"></path>
+            </g>
+        </svg>
+    </button>
+    <div id="myModalpw" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">修改密码</h4>
+                </div>
+                <div class="modal-body form-horizontal">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">旧密码</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control" id="inputEmail3" placeholder="旧密码">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword3" class="col-sm-2 control-label">新密码</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" id="inputPassword3" placeholder="新密码">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword3" class="col-sm-2 control-label">确认密码</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" id="inputPassword3" placeholder="确认密码">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="port" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">端口信息</h4>
+                </div>
+                <div class="modal-body fix">
+                    <div class="col-md-3 port-info">
+                    </div>
+                    <div class="col-md-9 more-info">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{{ static_url('js/jquery.min.js') }}"></script>
+    <script src="{{ static_url('js/bootstrap.min.js') }}"></script>
+    <script src="{{ static_url('js/myalert.js') }}"></script>
+    <script src="{{ static_url('js/table2excel.js') }}"></script>
+    <script src="{{ static_url('js/jquery-jvectormap-2.0.3.min.js') }}"></script>
+    <script src="{{ static_url('js/jquery-jvectormap-world-mill-en.js') }}"></script>
+    <script src="{{ static_url('js/d3.min.js') }}"></script>
+    <script src="{{ static_url('js/paint.js') }}"></script>
+    <script src="{{ static_url('js/dns.js') }}"></script>
+    <script>
+        $('#btn-query').on('click')
+    </script>
+</body>
+
+</html>

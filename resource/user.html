@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>用户管理</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/font-awesome.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row head-row">
+            <div class="col-lg-12">
+                <h1>子域名分析系统用户管理</h1>
+            </div>
+        </div>
+        <div class="row content clearfix auto">
+            <div class="aside col-lg-3">
+                <ul class="nav nav-pills nav-stacked">
+                    <li role="presentation" class="active"><a href="#">用户管理</a></li>
+                    <li role="presentation"><a href="#">用户日志</a></li>
+                </ul>
+            </div>
+            <div class="main col-lg-9">
+                <div class="table-domain table-user">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <th>用户名</th>
+                            <th>上次登录ip</th>
+                            <th>上次登录时间</th>
+                            <th>操作</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>admin</td>
+                                <td>192.168.1.1</td>
+                                <td>2017-6-5 16:16</td>
+                                <td><button class="btn btn-primary" data-toggle="modal" data-target="#myModalpw">修改密码</button></td>
+                            </tr>
+                            <tr>
+                                <td>admin</td>
+                                <td>192.168.1.1</td>
+                                <td>2017-6-5 16:16</td>
+                                <td><button class="btn btn-primary" data-toggle="modal" data-target="#myModalpw">修改密码</button></td>
+                            </tr>
+                            <tr>
+                                <td>admin</td>
+                                <td>192.168.1.1</td>
+                                <td>2017-6-5 16:16</td>
+                                <td><button class="btn btn-primary" data-toggle="modal" data-target="#myModalpw">修改密码</button></td>
+                            </tr>
+                            <tr>
+                                <td>admin</td>
+                                <td>192.168.1.1</td>
+                                <td>2017-6-5 16:16</td>
+                                <td><button class="btn btn-primary" data-toggle="modal" data-target="#myModalpw">修改密码</button></td>
+                            </tr>
+                            <tr>
+                                <td>admin</td>
+                                <td>192.168.1.1</td>
+                                <td>2017-6-5 16:16</td>
+                                <td><button class="btn btn-primary" data-toggle="modal" data-target="#myModalpw">修改密码</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="table-domain table-log">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <th>用户名</th>
+                            <th>操作</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>admin</td>
+                                <td>查询</td>
+                            </tr>
+                            <tr>
+                                <td>admin</td>
+                                <td>查询</td>
+                            </tr>
+                            <tr>
+                                <td>admin</td>
+                                <td>查询</td>
+                            </tr>
+                            <tr>
+                                <td>admin</td>
+                                <td>查询</td>
+                            </tr>
+                            <tr>
+                                <td>admin</td>
+                                <td>查询</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="myModalpw" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">修改密码</h4>
+                </div>
+                <div class="modal-body form-horizontal">
+                    <!--<div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">旧密码</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control" id="inputEmail3" placeholder="旧密码">
+                        </div>
+                    </div>-->
+                    <div class="form-group">
+                        <label for="inputPassword3" class="col-sm-2 control-label">新密码</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" id="inputPassword3" placeholder="新密码">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword3" class="col-sm-2 control-label">确认密码</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" id="inputPassword3" placeholder="确认密码">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="./js/jquery-3.2.1.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+    <script src="./js/myalert.js"></script>
+    <script>
+        $(".nav li").click(function (e) {
+            var index = $(".nav li").index(this)
+            if (!$(e.target).hasClass("active")) {
+                $(".nav li").removeClass("active")
+                $(".table-domain").css("display", "none")
+                $(".nav li:eq("+ index +")").addClass("active")
+                $(".table-domain:eq("+ index +")").css("display", "block")
+            }
+        })
+    </script>
+</body>
+
+</html>

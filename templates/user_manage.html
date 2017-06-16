@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>用户管理</title>
+    <link rel="stylesheet" href="{{ static_url('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ static_url('css/font-awesome.min.css') }}">
+    <link rel="stylesheet" href="{{ static_url('css/style.css') }}">
+</head>
+
+<body>
+    <div class="header">
+        <div class="header-inner" data-toggle="dropdown" class="dropdown-toggle">
+            <div class="mini-avatar">
+                <img src="{{ static_url('img/avatar/' + avatar + '.png') }}" alt="avatar">
+            </div>
+            <span>{{username}}</span>
+            <b class="caret"></b>
+            <!--<button id="logout" class="btn btn-primary" type="button">登出</button>-->
+        </div>
+        <ul class="dropdown-menu extended logout">
+            <div class="log-arrow-up"></div>
+            <li><a id="logout" href="/logout"><i class="fa fa-unlink"></i> 登出</a></li>
+        </ul>
+    </div>
+    <div class="container-fluid">
+        <div class="row head-row">
+            <div class="col-lg-12">
+                <h1>子域名分析系统用户管理</h1>
+            </div>
+        </div>
+        <div class="row content clearfix auto">
+            <!--<div class="aside col-lg-3">-->
+                <!--<ul class="nav nav-pills nav-stacked">-->
+                    <!--<li role="presentation" class="active"><a href="#">用户管理</a></li>-->
+                    <!--<li role="presentation"><a href="#">用户日志</a></li>-->
+                <!--</ul>-->
+            <!--</div>-->
+            <div class="col-lg-12">
+                <div class="table-domain table-user">
+                    <div style="margin: 10px 0; text-align: left;">
+                        <button type="button" class="btn btn-primary btn-submit" data-toggle="modal" data-target="#modal-add-user">添加</button>
+                    </div>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <th>编号</th>
+                            <th>用户名</th>
+                            <th>上次登录ip</th>
+                            <th>上次登录时间</th>
+                            <th>备注</th>
+                            <th>操作</th>
+                        </thead>
+                        <tbody id="table-user">
+                            {% for user in users %}
+                            <tr data-username="{{ user['username'] }}">
+                                <td>{{ user['id'] }}</td>
+                                <td>{{ user['username'] }}</td>
+                                <td>{{ user['create_time'] }}</td>
+                                <td>{{ user['lastlogin_time'] }}</td>
+                                <td>{{ user['comment'] }}</td>
+                                <td>
+                                    <button class="btn btn-primary btn-modify-password" data-toggle="modal" data-target="#modal-modify-pwd">修改密码</button>
+                                    <button class="btn btn-danger btn-remove-user" data-toggle="modal" data-target="#modal-remove">删除</button>
+                                </td>
+                            </tr>
+                            {% end %}
+                            <!--<tr>-->
+                                <!--<td>admin</td>-->
+                                <!--<td>192.168.1.1</td>-->
+                                <!--<td>2017-6-5 16:16</td>-->
+                                <!--<td><button class="btn btn-primary" data-toggle="modal" data-target="#myModalpw">修改密码</button></td>-->
+                            <!--</tr>-->
+                            <!--<tr>-->
+                                <!--<td>admin</td>-->
+                                <!--<td>192.168.1.1</td>-->
+                                <!--<td>2017-6-5 16:16</td>-->
+                                <!--<td><button class="btn btn-primary" data-toggle="modal" data-target="#myModalpw">修改密码</button></td>-->
+                            <!--</tr>-->
+                            <!--<tr>-->
+                                <!--<td>admin</td>-->
+                                <!--<td>192.168.1.1</td>-->
+                                <!--<td>2017-6-5 16:16</td>-->
+                                <!--<td><button class="btn btn-primary" data-toggle="modal" data-target="#myModalpw">修改密码</button></td>-->
+                            <!--</tr>-->
+                            <!--<tr>-->
+                                <!--<td>admin</td>-->
+                                <!--<td>192.168.1.1</td>-->
+                                <!--<td>2017-6-5 16:16</td>-->
+                                <!--<td><button class="btn btn-primary" data-toggle="modal" data-target="#myModalpw">修改密码</button></td>-->
+                            <!--</tr>-->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="table-domain table-log">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <th>用户名</th>
+                            <th>操作</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>admin</td>
+                                <td>查询</td>
+                            </tr>
+                            <tr>
+                                <td>admin</td>
+                                <td>查询</td>
+                            </tr>
+                            <tr>
+                                <td>admin</td>
+                                <td>查询</td>
+                            </tr>
+                            <tr>
+                                <td>admin</td>
+                                <td>查询</td>
+                            </tr>
+                            <tr>
+                                <td>admin</td>
+                                <td>查询</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="modal-modify-pwd" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">修改密码</h4>
+                </div>
+                <div class="modal-body form-horizontal">
+                    <!--<div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">旧密码</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control" id="inputEmail3" placeholder="旧密码">
+                        </div>
+                    </div>-->
+                    <div class="form-group">
+                        <label for="modify__oldPwd" class="col-sm-2 control-label">新密码</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control modify__oldPwd" id="modify__oldPwd" placeholder="新密码">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="modify__newPwd" class="col-sm-2 control-label">确认密码</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control modify__newPwd" id="modify__newPwd" placeholder="确认密码">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-cancel" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary btn-submit">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="modal-remove" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">是否删除</h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-danger btn-submit">删除</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="modal-add-user" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">修改密码</h4>
+                </div>
+                <div class="modal-body form-horizontal">
+                    <div class="form-group">
+                        <label for="add__password" class="col-sm-2 control-label">用户名</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control add__password" id="add__username" placeholder="用户名">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="add__password" class="col-sm-2 control-label">密码</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control add__password" id="add__password" placeholder="密码">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="add__comment" class="col-sm-2 control-label">备注</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control add__password" id="add__comment" placeholder="备注">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default btn-cancel" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary btn-submit">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{{ static_url('js/jquery-3.2.1.js') }}"></script>
+    <script src="{{ static_url('js/bootstrap.min.js') }}"></script>
+    <script src="{{ static_url('js/myalert.js') }}"></script>
+    <script>
+        $(".nav li").click(function (e) {
+            var index = $(".nav li").index(this)
+            if (!$(e.target).hasClass("active")) {
+                $(".nav li").removeClass("active")
+                $(".table-domain").css("display", "none")
+                $(".nav li:eq("+ index +")").addClass("active")
+                $(".table-domain:eq("+ index +")").css("display", "block")
+            }
+        })
+    </script>
+    <script>
+        (function($) {
+            'use strict';
+
+            var table = $('#table-user');
+
+            var moduleModifyUserPassword = {
+                'init': function() {
+                    this.bindViews();
+                    this.bindEvents();
+                },
+                'bindViews': function() {
+                    this.$container = $('#modal-modify-pwd');
+                    this.$inputNewPwd = $('#modify__oldPwd');
+                    this.$inputNewPwdRepeat = $('#modify__newPwd');
+                    this.$btnClose = this.$container.find('button.close');
+                    this.$btnCancel = this.$container.find('button.btn-cancel');
+                    this.$btnSubmit = this.$container.find('button.btn-submit');
+                },
+                'bindEvents': function() {
+                    this.$btnClose.on('click', this.reset.bind(this));
+                    this.$btnCancel.on('click', this.reset.bind(this));
+                    this.$btnSubmit.on('click', this.submit.bind(this));
+                },
+                'reset': function() {
+                    this.$inputNewPwd.val('');
+                    this.$inputNewPwdRepeat.val('');
+                },
+                'setUser': function(username) {
+                    if (username) {
+                        console.log('set user: ' + username);
+                        this.username = username;
+                    }
+                },
+                'submit': function() {
+                    if (!this.username) {
+                        return;
+                    }
+                    var newPwd = this.$inputNewPwd.val(),
+                        newPwdRepeat = this.$inputNewPwdRepeat.val();
+                    if (!(newPwd && newPwdRepeat)) {
+                        myalert('请输入内容');
+                        return;
+                    }
+                    if (!(newPwd === newPwdRepeat)) {
+                        myalert('两次输入密码补不一致');
+                        return;
+                    }
+                    var params = {
+                        'username': this.username,
+                        'password': newPwd
+                    };
+                    $.post('/admin_user_modify_pwd', params, this.callback.bind(this), 'json');
+                },
+                'callback': function(data) {
+                    if (data && data['success']) {
+                        myalert('修改成功', 'tipright');
+                    } else {
+                        myalert('修改失败')
+                    }
+                    this.$container.modal('hide');
+                    this.reset();
+                }
+            };
+            window['moduleModifyUserPassword'] = {
+                'setUser': moduleModifyUserPassword.setUser.bind(moduleModifyUserPassword)
+            };
+            moduleModifyUserPassword.init();
+
+            var moduleRemoveUser = {
+                'init': function() {
+                    this.bindViews();
+                    this.bindEvents();
+                },
+                'bindViews': function() {
+                    this.$container = $('#modal-remove');
+                    this.$btnSubmit = this.$container.find('button.btn-submit');
+                },
+                'bindEvents': function() {
+                    this.$btnSubmit.on('click', this.submit.bind(this));
+                },
+                'setUser': function(username) {
+                    if (username) {
+                        console.log('set user: ' + username);
+                        this.username = username;
+                    }
+                },
+                'submit': function() {
+                    var params = {
+                        'username': this.username
+                    };
+                    $.post('/admin_user_delete', params, this.callback.bind(this), 'json');
+                },
+                'callback': function(data) {
+                    if (data && data['success']) {
+                        myalert('删除成功。', 'tipright')
+                        table.find('[data-username="' + this.username + '"]').remove();
+                    } else {
+                        myalert('删除失败')
+                    }
+                    this.$container.modal('hide');
+                }
+            };
+            window['moduleRemoveUser'] = {
+                'setUser': moduleRemoveUser.setUser.bind(moduleRemoveUser)
+            };
+            moduleRemoveUser.init();
+
+            var moduleAddUser = {
+                'init': function() {
+                    this.bindViews();
+                    this.bindEvents();
+                },
+                'bindViews': function() {
+                    this.$container = $('#modal-add-user');
+                    this.$inputUsername = $('#add__username');
+                    this.$inputPassword = $('#add__password');
+                    this.$inputComment = $('#add__comment');
+                    this.$btnSubmit = this.$container.find('button.btn-submit');
+                },
+                'bindEvents': function() {
+                    this.$btnSubmit.on('click', this.submit.bind(this));
+                },
+                'submit': function() {
+                    var params = {
+                        'username': this.$inputUsername.val(),
+                        'password': this.$inputPassword.val(),
+                        'comment': this.$inputComment.val()
+                    };
+                    $.post('/admin_user_add', params, this.callback.bind(this), 'json');
+                },
+                'callback': function(data) {
+                    if (data && data['success']) {
+                        myalert('添加成功。', 'tipright');
+                        var userData = data['data'];
+                        var templateRow = `<tr data-username="${ userData['username'] }">
+                                <td>${ userData['id'] }</td>
+                                <td>${ userData['username'] }</td>
+                                <td>${ userData['create_time'] }</td>
+                                <td>${ userData['lastlogin_time'] }</td>
+                                <td>${ userData['comment'] }</td>
+                                <td>
+                                    <button class="btn btn-primary btn-modify-password" data-toggle="modal" data-target="#modal-modify-pwd">修改密码</button>
+                                    <button class="btn btn-danger btn-remove-user" data-toggle="modal" data-target="#modal-remove">删除</button>
+                                </td>
+                            </tr>`;
+                        table.append(templateRow);
+
+                    } else {
+                        myalert('添加失败');
+                    }
+                    this.$container.modal('hide');
+                }
+            };
+            moduleAddUser.init();
+
+
+            table.on('click', 'button.btn-modify-password', function(event) {
+                var $btn = $(event.target);
+                window['moduleModifyUserPassword'].setUser($btn.parents('tr').attr('data-username'));
+            });
+            table.on('click', 'button.btn-remove-user', function(event) {
+                var $btn = $(event.target);
+                window['moduleRemoveUser'].setUser($btn.parents('tr').attr('data-username'));
+            });
+
+//            table.find('button.btn-modify-password').each(function(i, e) {
+//                $(e).on('click', function() {
+//                    window['moduleModifyUserPassword'].setUser($(e).parents('tr').attr('data-username'));
+//                });
+//            });
+//            table.find('button.btn-remove-user').each(function(i, e) {
+//                $(e).on('click', function() {
+//                    window['moduleRemoveUser'].setUser($(e).parents('tr').attr('data-username'));
+//                });
+//            });
+        }) (jQuery);
+    </script>
+
+</body>
+
+</html>

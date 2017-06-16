@@ -1,0 +1,36 @@
+{
+  "project_name": "sub_domain_search",
+  "debug": true,
+  "http_host": "0.0.0.0",
+  "http_port": 8888,
+  "pre_system": "system_",
+  "mysql_host": "127.0.0.1:3306",
+  "mysql_user": "tom",
+  "mysql_pwd": "tom",
+  "mysql_db": "subdomain",
+  "mysql_charset": "utf8",
+  "redis_host": "127.0.0.1",
+  "redis_port": 6379,
+
+  "dns_zone_transfer": true,
+  "modules": {
+    "alexa": true,
+    "baidu": true,
+    "bing": true,
+    "bugbank": true,
+    "crt": true,
+    "get_ssl": true,
+    "i_links": true,
+    "ip138": true,
+    "juanluo": true,
+    "netcraft": true,
+    "page_catcher": true,
+    "sitedossier": true,
+    "threatcrowd": true,
+    "threatminer": true,
+    "hack_target": true
+  },
+
+  "reverse_ip_api_host": "192.168.1.169:8210",
+  "domain_detect_api_host": "192.168.1.169:8310"
+}
