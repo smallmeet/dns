@@ -14,3 +14,5 @@ pycurl==7.43.0
 SQLAlchemy==1.1.10
 ipaddress==1.0.18
 scanless
+gevent==1.2.2
+ws4py==0.4.2

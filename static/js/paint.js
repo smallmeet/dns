@@ -1,4 +1,4 @@
-var height = "600px",
+var height = "800px",
     width = "100%"
 
 var svg = d3.select("#svg")
@@ -7,11 +7,11 @@ var svg = d3.select("#svg")
     .attr("height", height)
 
 var gTree = svg.append("g")
-    .attr("transform", "translate(350,20)")
+    .attr("transform", "translate(350,0)")
 
 
 var tree = d3.layout.tree()
-    .size([600, 900])
+    .size(['100%', "100%"])
     .separation(function (a, b) {
         return a.parent == b.parent ? 1 : 2
     })

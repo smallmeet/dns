@@ -441,9 +441,7 @@ class ResultWebSocketRealHandler(WebSocketHandler):
                 eventid = request_json['eventid']
                 res = PortScanEventService().get_info_by_id(eventid)
                 self.emit_scan_info(res)
-
             return
-
 
         if request_json.get('domain'):
             target_domain = request_json.get('domain')

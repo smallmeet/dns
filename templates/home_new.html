@@ -28,8 +28,8 @@
             </div>
             <ul class="dropdown-menu extended logout">
                 <div class="log-arrow-up"></div>
-                <li><a href="#" data-toggle="modal" data-target="#myModalpw"><i class="fa fa-unlock"></i> 修改密码</a></li>
-                <li><a id="logout" href="#"><i class="fa fa-unlink"></i> 登出</a></li>
+                <li><a href="#" data-toggle="modal" data-target="#modal-modify-password"><i class="fa fa-unlock"></i> 修改密码</a></li>
+                <li><a id="logout" href="/logout"><i class="fa fa-unlink"></i> 登出</a></li>
             </ul>
         </div>
     </div>
@@ -44,7 +44,7 @@
             </div>
         </div>
     </div>
-    <div id="myModalpw" class="modal" tabindex="-1" role="dialog">
+    <div id="modal-modify-password" class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -53,43 +53,72 @@
                 </div>
                 <div class="modal-body form-horizontal">
                     <div class="form-group">
-                        <label for="inputEmail3" class="col-sm-2 control-label">旧密码</label>
+                        <label for="input-old-password" class="col-sm-2 control-label" style="color: #000;">旧密码</label>
                         <div class="col-sm-10">
-                            <input type="email" class="form-control" id="inputEmail3" placeholder="旧密码">
+                            <input type="password" class="form-control" id="input-old-password" placeholder="旧密码">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="inputPassword3" class="col-sm-2 control-label">新密码</label>
+                        <label for="input-new-password" class="col-sm-2 control-label" style="color: #000;">新密码</label>
                         <div class="col-sm-10">
-                            <input type="password" class="form-control" id="inputPassword3" placeholder="新密码">
+                            <input type="password" class="form-control" id="input-new-password" placeholder="新密码">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="inputPassword3" class="col-sm-2 control-label">确认密码</label>
+                        <label for="input-new-password-repeat" class="col-sm-2 control-label" style="color: #000;">确认密码</label>
                         <div class="col-sm-10">
-                            <input type="password" class="form-control" id="inputPassword3" placeholder="确认密码">
+                            <input type="password" class="form-control" id="input-new-password-repeat" placeholder="确认密码">
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-primary">确定</button>
+                    <button type="button" class="btn btn-default cancel" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary submit">确定</button>
                 </div>
             </div>
         </div>
     </div>
     <script src="{{ static_url('js/jquery.min.js') }}"></script>
     <script src="{{ static_url('js/bootstrap.min.js') }}"></script>
+    <script src="{{ static_url('js/myalert.js') }}"></script>
+    <script src="{{ static_url('js/modify_password.js') }}"></script>
     <script>
-        $('#btn-query').on('click', function() {
-            var inputContent = $('#input-content').val();
-            window.location.href = '/result_new?content=' + inputContent + '&dictionary=false';
-        });
         $('body').keydown(function(e) {
           if (e.keyCode == 13) {
             $('#btn-query').click()
           }
         });
+
+        $('#btn-query').on('click', function() {
+            var inputContent = $('#input-content').val();
+            if (inputContent) {
+                if (checkIp(inputContent)) {
+                    window.location.href = "/reverse_ip_lookup_new?ip=" + inputContent;
+                } else if(checkeURL(inputContent)) {
+                    window.location.href = "/result_new?&content=" + inputContent
+                } else {
+                    myalert("请输入合法的域名", "tipwrong")
+                }
+            } else {
+                myalert("搜索内容不能为空")
+            }
+        });
+
+        function checkeURL(URL){
+            var str=URL;
+            var reg = /((https|http|ftp|rtsp|mms):\/\/)?(([0-9a-z_!~*'().&=+$%-]+:)?[0-9a-z_!~*'().&=+$%-]+@)?(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-z_!~*'()-]+\.)*([0-9a-z][0-9a-z-]{0,61})?[0-9a-z]\.[a-z]{2,6})(:[0-9]{1,4})?((\/?)|(\/[0-9a-z_!~*'().;?:@&=+$,%#-]+)+\/?)/g;
+            var objExp=new RegExp(reg);
+            if (objExp.test(str)) {
+                return true
+            } else {
+                return false
+            }
+        }
+
+        function checkIp(ip) {
+            var regx = /^(1\d{2}|2[0-4]\d|25[0-5]|[1-9]\d|[1-9])\.(1\d{2}|2[0-4]\d|25[0-5]|[1-9]\d|\d)\.(1\d{2}|2[0-4]\d|25[0-5]|[1-9]\d|\d)\.(1\d{2}|2[0-4]\d|25[0-5]|[1-9]\d|\d)$/;
+            return regx.test(ip);
+        }
     </script>
 </body>
 

@@ -83,6 +83,14 @@ font-size: 1.4em;
   text-align: left;
 }
 
+#whois {
+  margin-bottom: 20px;
+}
+
+.more-wrapper {
+  text-align: center;
+}
+
 .table-whois > tbody > tr > td{
     /*text-align: center;*/
     word-break: break-all;
@@ -472,5 +480,50 @@ i[data-parent] {
   fill: none;
   stroke: #999;
   stroke-width: 1.5px;
+}
+
+#tree_domain_svg {
+  border-bottom: 1px solid;
+  margin-bottom: 10px;
+}
+
+.cms {
+  background: #3e773e;
+  padding: 1px 2px 3px;
+  border-radius: 2px;
+  vertical-align: middle;
+  cursor: pointer;
+  font-family: "SumHei";
+  color: white;
+}
+
+.cms.cms-server {
+  background: #3e773e;
+}
+
+.cms.cms-pdt {
+  background: #056d96;
+}
+
+.important {
+  display: table-row;
+}
+
+.not-important {
+  display: none;
+}
+
+.g-content {
+  height: 8000px;
+  width: 100%;
+}
+
+.sort-domain {
+  display: block;
+  margin-bottom: 7px;
+}
+
+span.label i {
+  vertical-align: middle;
 }
 

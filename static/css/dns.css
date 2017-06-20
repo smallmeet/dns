@@ -455,3 +455,22 @@ i[data-parent] {
 [data-search-ip] {
   cursor: pointer;
 }
+
+.node {
+  cursor: pointer;
+}
+.node circle {
+  fill: #fff;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+.node text {
+  fill: white;
+  font: 10px sans-serif;
+}
+.link {
+  fill: none;
+  stroke: #999;
+  stroke-width: 1.5px;
+}
+

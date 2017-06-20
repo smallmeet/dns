@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/dns.css">
+    <link rel="stylesheet" href="./css/jquery-jvectormap-2.0.3.css">
+    <link rel="stylesheet" href="./css/flag.css">
+    <link rel="stylesheet" href="./css/font-awesome.min.css">
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="inner-wrapper">
+            <div class="container fix">
+                <div class="cover-container">
+                    <div class="inner cover">
+                        <div id="subdomain" style="display: none;">
+                            <p class="title">子域名<span style="font-size: 0.8em; color: #777;"> ** 数据可能不是最新，来自静态数据库(每日更新)</span></p>
+                            <div class="table-responsive table2excel" style="text-align: left;">
+                                <table class="table sort-table" style="font-size: 1.1em; border-color: rgb(119, 119, 119); display: table;">
+                                    <thead>
+                                        <tr>
+                                            <th>IP</th>
+                                            <th>Date</th>
+                                            <th>Domain</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr data-sort-ip="58.222.21.70">
+                                            <td><i data-toggle="tooltip" title="" data-parent="www.kq88.com" data-ip="58.222.21.70"
+                                                    class="fa fa-eye" data-original-title="端口扫描"></i> <span data-search-ip="58.222.21.70">58.222.21.70</span><br></td>
+                                            <td>2017-06-19 09:39:30</td>
+                                            <td data-select="www.kq88.com" class="col-md-3">www.kq88.com <span class="flag flag-cn"></span><br>kq88.com <span class="flag flag-cn"></span><br></td>
+                                            <td>
+                                                <div data-domain="www.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                            </td>
+                                        </tr>
+
+                                        <tr data-sort-ip="121.199.9.70">
+                                            <td><i data-toggle="tooltip" title="" data-parent="blog.kq88.com" data-ip="121.199.9.70"
+                                                    class="fa fa-eye" data-original-title="端口扫描"></i> <span data-search-ip="121.199.9.70">121.199.9.70</span><br></td>
+                                            <td>2017-06-19 09:39:30</td>
+                                            <td data-select="blog.kq88.com" class="col-md-3">blog.kq88.com <span class="flag flag-cn"></span><br></td>
+                                            <td>
+                                                <div data-domain="blog.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                            </td>
+                                        </tr>
+
+                                        <tr data-sort-ip="42.121.57.135">
+                                            <td><i data-toggle="tooltip" title="" data-parent="vcd.kq88.com" data-ip="42.121.57.135"
+                                                    class="fa fa-eye" data-original-title="端口扫描"></i> <span data-search-ip="42.121.57.135">42.121.57.135</span><br></td>
+                                            <td>2017-06-19 09:39:30</td>
+                                            <td data-select="vcd.kq88.com" class="col-md-3">
+                                                vcd.kq88.com <span class="flag flag-cn"></span><br> hy.kq88.com <span class="flag flag-cn"></span><br>                                                ks.kq88.com <span class="flag flag-cn"></span><br> px.kq88.com <span class="flag flag-cn"></span><br>                                                kqzr.kq88.com
+                                                <span class="flag flag-cn"></span><br> zs.kq88.com <span class="flag flag-cn"></span><br>                                                jf.kq88.com <span class="flag flag-cn"></span><br> jobs.kq88.com <span class="flag flag-cn"></span><br>                                                zh.kq88.com <span class="flag flag-cn"></span><br> ad.kq88.com <span class="flag flag-cn"></span><br>                                                x.kq88.com <span class="flag flag-cn"></span><br> i.kq88.com <span class="flag flag-cn"></span><br>                                                sc.kq88.com <span class="flag flag-cn"></span><br> hy2.kq88.com <span class="flag flag-cn"></span><br>
+                                            </td>
+                                            <td>
+                                                <div data-domain="vcd.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="hy.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="ks.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="px.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="kqzr.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="zs.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="jf.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="jobs.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="zh.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="ad.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="x.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="i.kq88.com"><span class="label label-warning"><i class="fa  fa-unlink"></i> 服务器无法访问</span></div>
+                                                <div data-domain="sc.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="hy2.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                            </td>
+                                        </tr>
+
+                                        <tr data-sort-ip="103.7.30.100," 203.205.128.111="">
+                                            <td><i data-toggle="tooltip" title="" data-parent="mail.kq88.com" data-ip="103.7.30.100"
+                                                    class="fa fa-eye" data-original-title="端口扫描"></i> <span data-search-ip="103.7.30.100">103.7.30.100</span><br></td>
+                                            <td>2017-06-19 09:23:52</td>
+                                            <td data-select="mail.kq88.com" class="col-md-3">mail.kq88.com <span class="flag flag-cn"></span><br></td>
+                                            <td>
+                                                <div data-domain="mail.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                            </td>
+                                        </tr>
+
+                                        <tr data-sort-ip="103.7.30.100," 203.205.128.111="">
+                                            <td><i data-toggle="tooltip" title="" data-parent="mail.kq88.com" data-ip=" 203.205.128.111"
+                                                    class="fa fa-eye" data-original-title="端口扫描"></i> <span data-search-ip=" 203.205.128.111"> 203.205.128.111</span><br></td>
+                                            <td>2017-06-19 09:23:52</td>
+                                            <td data-select="mail.kq88.com" class="col-md-3">mail.kq88.com <span class="flag flag-cn"></span><br></td>
+                                            <td>
+                                                <div data-domain="mail.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                            </td>
+                                        </tr>
+
+                                        <tr data-sort-ip="123.125.112.110">
+                                            <td><i data-toggle="tooltip" title="" data-parent="m.zs.kq88.com" data-ip="123.125.112.110"
+                                                    class="fa fa-eye" data-original-title="端口扫描"></i> <span data-search-ip="123.125.112.110">123.125.112.110</span><br></td>
+                                            <td>2017-06-19 09:23:52</td>
+                                            <td data-select="m.zs.kq88.com" class="col-md-3">m.zs.kq88.com <span class="flag flag-cn"></span><br></td>
+                                            <td>
+                                                <div data-domain="m.zs.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                            </td>
+                                        </tr>
+
+                                        <tr data-sort-ip="42.121.57.135">
+                                            <td><i data-toggle="tooltip" title="" data-parent="zsd.kq88.com" data-ip="42.121.57.135"
+                                                    class="fa fa-eye" data-original-title="端口扫描"></i> <span data-search-ip="42.121.57.135">42.121.57.135</span><br></td>
+                                            <td>2017-06-19 09:23:52</td>
+                                            <td data-select="zsd.kq88.com" class="col-md-3">zsd.kq88.com <span class="flag flag-cn"></span><br></td>
+                                            <td>
+                                                <div data-domain="zsd.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                            </td>
+                                        </tr>
+                                        <tr data-sort-ip="42.121.57.134">
+                                            <td><i data-toggle="tooltip" title="" data-parent="vcd.kq88.com" data-ip="42.121.57.135"
+                                                    class="fa fa-eye" data-original-title="端口扫描"></i> <span data-search-ip="42.121.57.135">42.121.57.135</span><br></td>
+                                            <td>2017-06-19 09:39:30</td>
+                                            <td data-select="vcd.kq88.com" class="col-md-3">
+                                                vcd.kq88.com <span class="flag flag-cn"></span><br> hy.kq88.com <span class="flag flag-cn"></span><br>                                                ks.kq88.com <span class="flag flag-cn"></span><br> px.kq88.com <span class="flag flag-cn"></span><br>                                                kqzr.kq88.com
+                                                <span class="flag flag-cn"></span><br> zs.kq88.com <span class="flag flag-cn"></span><br>                                                jf.kq88.com <span class="flag flag-cn"></span><br> jobs.kq88.com <span class="flag flag-cn"></span><br>                                                zh.kq88.com <span class="flag flag-cn"></span><br> ad.kq88.com <span class="flag flag-cn"></span><br>                                                x.kq88.com <span class="flag flag-cn"></span><br> i.kq88.com <span class="flag flag-cn"></span><br>                                                sc.kq88.com <span class="flag flag-cn"></span><br> hy2.kq88.com <span class="flag flag-cn"></span><br>
+                                            </td>
+                                            <td>
+                                                <div data-domain="vcd.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="hy.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="ks.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="px.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="kqzr.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="zs.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="jf.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="jobs.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="zh.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="ad.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="x.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="i.kq88.com"><span class="label label-warning"><i class="fa  fa-unlink"></i> 服务器无法访问</span></div>
+                                                <div data-domain="sc.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="hy2.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                            </td>
+                                        </tr>
+                                        <tr data-sort-ip="42.121.57.133">
+                                            <td><i data-toggle="tooltip" title="" data-parent="vcd.kq88.com" data-ip="42.121.57.135"
+                                                    class="fa fa-eye" data-original-title="端口扫描"></i> <span data-search-ip="42.121.57.135">42.121.57.135</span><br></td>
+                                            <td>2017-06-19 09:39:30</td>
+                                            <td data-select="vcd.kq88.com" class="col-md-3">
+                                                vcd.kq88.com <span class="flag flag-cn"></span><br> hy.kq88.com <span class="flag flag-cn"></span><br>                                                ks.kq88.com <span class="flag flag-cn"></span><br> px.kq88.com <span class="flag flag-cn"></span><br>                                                kqzr.kq88.com
+                                                <span class="flag flag-cn"></span><br> zs.kq88.com <span class="flag flag-cn"></span><br>                                                jf.kq88.com <span class="flag flag-cn"></span><br> jobs.kq88.com <span class="flag flag-cn"></span><br>                                                zh.kq88.com <span class="flag flag-cn"></span><br> ad.kq88.com <span class="flag flag-cn"></span><br>                                                x.kq88.com <span class="flag flag-cn"></span><br> i.kq88.com <span class="flag flag-cn"></span><br>                                                sc.kq88.com <span class="flag flag-cn"></span><br> hy2.kq88.com <span class="flag flag-cn"></span><br>
+                                            </td>
+                                            <td>
+                                                <div data-domain="vcd.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="hy.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="ks.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="px.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="kqzr.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="zs.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="jf.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="jobs.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="zh.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="ad.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="x.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="i.kq88.com"><span class="label label-warning"><i class="fa  fa-unlink"></i> 服务器无法访问</span></div>
+                                                <div data-domain="sc.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="hy2.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                            </td>
+                                        </tr>
+                                        <tr data-sort-ip="42.121.57.132">
+                                            <td><i data-toggle="tooltip" title="" data-parent="vcd.kq88.com" data-ip="42.121.57.135"
+                                                    class="fa fa-eye" data-original-title="端口扫描"></i> <span data-search-ip="42.121.57.135">42.121.57.135</span><br></td>
+                                            <td>2017-06-19 09:39:30</td>
+                                            <td data-select="vcd.kq88.com" class="col-md-3">
+                                                vcd.kq88.com <span class="flag flag-cn"></span><br> hy.kq88.com <span class="flag flag-cn"></span><br>                                                ks.kq88.com <span class="flag flag-cn"></span><br> px.kq88.com <span class="flag flag-cn"></span><br>                                                kqzr.kq88.com
+                                                <span class="flag flag-cn"></span><br> zs.kq88.com <span class="flag flag-cn"></span><br>                                                jf.kq88.com <span class="flag flag-cn"></span><br> jobs.kq88.com <span class="flag flag-cn"></span><br>                                                zh.kq88.com <span class="flag flag-cn"></span><br> ad.kq88.com <span class="flag flag-cn"></span><br>                                                x.kq88.com <span class="flag flag-cn"></span><br> i.kq88.com <span class="flag flag-cn"></span><br>                                                sc.kq88.com <span class="flag flag-cn"></span><br> hy2.kq88.com <span class="flag flag-cn"></span><br>
+                                            </td>
+                                            <td>
+                                                <div data-domain="vcd.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="hy.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="ks.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="px.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="kqzr.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="zs.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="jf.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="jobs.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="zh.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="ad.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="x.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="i.kq88.com"><span class="label label-warning"><i class="fa  fa-unlink"></i> 服务器无法访问</span></div>
+                                                <div data-domain="sc.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="hy2.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                            </td>
+                                        </tr>
+                                        <tr data-sort-ip="42.121.57.131">
+                                            <td><i data-toggle="tooltip" title="" data-parent="vcd.kq88.com" data-ip="42.121.57.135"
+                                                    class="fa fa-eye" data-original-title="端口扫描"></i> <span data-search-ip="42.121.57.135">42.121.57.135</span><br></td>
+                                            <td>2017-06-19 09:39:30</td>
+                                            <td data-select="vcd.kq88.com" class="col-md-3">
+                                                vcd.kq88.com <span class="flag flag-cn"></span><br> hy.kq88.com <span class="flag flag-cn"></span><br>                                                ks.kq88.com <span class="flag flag-cn"></span><br> px.kq88.com <span class="flag flag-cn"></span><br>                                                kqzr.kq88.com
+                                                <span class="flag flag-cn"></span><br> zs.kq88.com <span class="flag flag-cn"></span><br>                                                jf.kq88.com <span class="flag flag-cn"></span><br> jobs.kq88.com <span class="flag flag-cn"></span><br>                                                zh.kq88.com <span class="flag flag-cn"></span><br> ad.kq88.com <span class="flag flag-cn"></span><br>                                                x.kq88.com <span class="flag flag-cn"></span><br> i.kq88.com <span class="flag flag-cn"></span><br>                                                sc.kq88.com <span class="flag flag-cn"></span><br> hy2.kq88.com <span class="flag flag-cn"></span><br>
+                                            </td>
+                                            <td>
+                                                <div data-domain="vcd.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="hy.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="ks.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="px.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="kqzr.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="zs.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="jf.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="jobs.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="zh.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="ad.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="x.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="i.kq88.com"><span class="label label-warning"><i class="fa  fa-unlink"></i> 服务器无法访问</span></div>
+                                                <div data-domain="sc.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="hy2.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                            </td>
+                                        </tr>
+                                        <tr data-sort-ip="42.121.57.122">
+                                            <td><i data-toggle="tooltip" title="" data-parent="vcd.kq88.com" data-ip="42.121.57.135"
+                                                    class="fa fa-eye" data-original-title="端口扫描"></i> <span data-search-ip="42.121.57.135">42.121.57.135</span><br></td>
+                                            <td>2017-06-19 09:39:30</td>
+                                            <td data-select="vcd.kq88.com" class="col-md-3">
+                                                vcd.kq88.com <span class="flag flag-cn"></span><br> hy.kq88.com <span class="flag flag-cn"></span><br>                                                ks.kq88.com <span class="flag flag-cn"></span><br> px.kq88.com <span class="flag flag-cn"></span><br>                                                kqzr.kq88.com
+                                                <span class="flag flag-cn"></span><br> zs.kq88.com <span class="flag flag-cn"></span><br>                                                jf.kq88.com <span class="flag flag-cn"></span><br> jobs.kq88.com <span class="flag flag-cn"></span><br>                                                zh.kq88.com <span class="flag flag-cn"></span><br> ad.kq88.com <span class="flag flag-cn"></span><br>                                                x.kq88.com <span class="flag flag-cn"></span><br> i.kq88.com <span class="flag flag-cn"></span><br>                                                sc.kq88.com <span class="flag flag-cn"></span><br> hy2.kq88.com <span class="flag flag-cn"></span><br>
+                                            </td>
+                                            <td>
+                                                <div data-domain="vcd.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="hy.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="ks.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="px.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="kqzr.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="zs.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="jf.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="jobs.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="zh.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="ad.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="x.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="i.kq88.com"><span class="label label-warning"><i class="fa  fa-unlink"></i> 服务器无法访问</span></div>
+                                                <div data-domain="sc.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="hy2.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                            </td>
+                                        </tr>
+                                        <tr data-sort-ip="42.121.57.112">
+                                            <td><i data-toggle="tooltip" title="" data-parent="vcd.kq88.com" data-ip="42.121.57.135"
+                                                    class="fa fa-eye" data-original-title="端口扫描"></i> <span data-search-ip="42.121.57.135">42.121.57.135</span><br></td>
+                                            <td>2017-06-19 09:39:30</td>
+                                            <td data-select="vcd.kq88.com" class="col-md-3">
+                                                vcd.kq88.com <span class="flag flag-cn"></span><br> hy.kq88.com <span class="flag flag-cn"></span><br>                                                ks.kq88.com <span class="flag flag-cn"></span><br> px.kq88.com <span class="flag flag-cn"></span><br>                                                kqzr.kq88.com
+                                                <span class="flag flag-cn"></span><br> zs.kq88.com <span class="flag flag-cn"></span><br>                                                jf.kq88.com <span class="flag flag-cn"></span><br> jobs.kq88.com <span class="flag flag-cn"></span><br>                                                zh.kq88.com <span class="flag flag-cn"></span><br> ad.kq88.com <span class="flag flag-cn"></span><br>                                                x.kq88.com <span class="flag flag-cn"></span><br> i.kq88.com <span class="flag flag-cn"></span><br>                                                sc.kq88.com <span class="flag flag-cn"></span><br> hy2.kq88.com <span class="flag flag-cn"></span><br>
+                                            </td>
+                                            <td>
+                                                <div data-domain="vcd.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="hy.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="ks.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="px.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="kqzr.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="zs.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="jf.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="jobs.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="zh.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="ad.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="x.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="i.kq88.com"><span class="label label-warning"><i class="fa  fa-unlink"></i> 服务器无法访问</span></div>
+                                                <div data-domain="sc.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="hy2.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                            </td>
+                                        </tr>
+                                        <tr data-sort-ip="42.121.57.103">
+                                            <td><i data-toggle="tooltip" title="" data-parent="vcd.kq88.com" data-ip="42.121.57.135"
+                                                    class="fa fa-eye" data-original-title="端口扫描"></i> <span data-search-ip="42.121.57.135">42.121.57.135</span><br></td>
+                                            <td>2017-06-19 09:39:30</td>
+                                            <td data-select="vcd.kq88.com" class="col-md-3">
+                                                vcd.kq88.com <span class="flag flag-cn"></span><br> hy.kq88.com <span class="flag flag-cn"></span><br>                                                ks.kq88.com <span class="flag flag-cn"></span><br> px.kq88.com <span class="flag flag-cn"></span><br>                                                kqzr.kq88.com
+                                                <span class="flag flag-cn"></span><br> zs.kq88.com <span class="flag flag-cn"></span><br>                                                jf.kq88.com <span class="flag flag-cn"></span><br> jobs.kq88.com <span class="flag flag-cn"></span><br>                                                zh.kq88.com <span class="flag flag-cn"></span><br> ad.kq88.com <span class="flag flag-cn"></span><br>                                                x.kq88.com <span class="flag flag-cn"></span><br> i.kq88.com <span class="flag flag-cn"></span><br>                                                sc.kq88.com <span class="flag flag-cn"></span><br> hy2.kq88.com <span class="flag flag-cn"></span><br>
+                                            </td>
+                                            <td>
+                                                <div data-domain="vcd.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="hy.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="ks.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="px.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="kqzr.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="zs.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="jf.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="jobs.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="zh.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="ad.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="x.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="i.kq88.com"><span class="label label-warning"><i class="fa  fa-unlink"></i> 服务器无法访问</span></div>
+                                                <div data-domain="sc.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="hy2.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                            </td>
+                                        </tr>
+                                        <tr data-sort-ip="42.121.57.102">
+                                            <td><i data-toggle="tooltip" title="" data-parent="vcd.kq88.com" data-ip="42.121.57.135"
+                                                    class="fa fa-eye" data-original-title="端口扫描"></i> <span data-search-ip="42.121.57.135">42.121.57.135</span><br></td>
+                                            <td>2017-06-19 09:39:30</td>
+                                            <td data-select="vcd.kq88.com" class="col-md-3">
+                                                vcd.kq88.com <span class="flag flag-cn"></span><br> hy.kq88.com <span class="flag flag-cn"></span><br>                                                ks.kq88.com <span class="flag flag-cn"></span><br> px.kq88.com <span class="flag flag-cn"></span><br>                                                kqzr.kq88.com
+                                                <span class="flag flag-cn"></span><br> zs.kq88.com <span class="flag flag-cn"></span><br>                                                jf.kq88.com <span class="flag flag-cn"></span><br> jobs.kq88.com <span class="flag flag-cn"></span><br>                                                zh.kq88.com <span class="flag flag-cn"></span><br> ad.kq88.com <span class="flag flag-cn"></span><br>                                                x.kq88.com <span class="flag flag-cn"></span><br> i.kq88.com <span class="flag flag-cn"></span><br>                                                sc.kq88.com <span class="flag flag-cn"></span><br> hy2.kq88.com <span class="flag flag-cn"></span><br>
+                                            </td>
+                                            <td>
+                                                <div data-domain="vcd.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="hy.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="ks.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="px.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="kqzr.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="zs.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="jf.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="jobs.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="zh.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="ad.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="x.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="i.kq88.com"><span class="label label-warning"><i class="fa  fa-unlink"></i> 服务器无法访问</span></div>
+                                                <div data-domain="sc.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="hy2.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                            </td>
+                                        </tr>
+                                        <tr data-sort-ip="42.121.57.101">
+                                            <td><i data-toggle="tooltip" title="" data-parent="vcd.kq88.com" data-ip="42.121.57.135"
+                                                    class="fa fa-eye" data-original-title="端口扫描"></i> <span data-search-ip="42.121.57.135">42.121.57.135</span><br></td>
+                                            <td>2017-06-19 09:39:30</td>
+                                            <td data-select="vcd.kq88.com" class="col-md-3">
+                                                vcd.kq88.com <span class="flag flag-cn"></span><br> hy.kq88.com <span class="flag flag-cn"></span><br>                                                ks.kq88.com <span class="flag flag-cn"></span><br> px.kq88.com <span class="flag flag-cn"></span><br>                                                kqzr.kq88.com
+                                                <span class="flag flag-cn"></span><br> zs.kq88.com <span class="flag flag-cn"></span><br>                                                jf.kq88.com <span class="flag flag-cn"></span><br> jobs.kq88.com <span class="flag flag-cn"></span><br>                                                zh.kq88.com <span class="flag flag-cn"></span><br> ad.kq88.com <span class="flag flag-cn"></span><br>                                                x.kq88.com <span class="flag flag-cn"></span><br> i.kq88.com <span class="flag flag-cn"></span><br>                                                sc.kq88.com <span class="flag flag-cn"></span><br> hy2.kq88.com <span class="flag flag-cn"></span><br>
+                                            </td>
+                                            <td>
+                                                <div data-domain="vcd.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="hy.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="ks.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="px.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="kqzr.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="zs.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="jf.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="jobs.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="zh.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="ad.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="x.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="i.kq88.com"><span class="label label-warning"><i class="fa  fa-unlink"></i> 服务器无法访问</span></div>
+                                                <div data-domain="sc.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                                <div data-domain="hy2.kq88.com"><span class="label label-primary"><i class="fa  fa-send"></i> 正常</span></div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <p class="title">域名分析图</p>
+                    </div>
+                </div>
+            </div>
+            <div id="svg">
+
+            </div>
+            <!--<svg width="100%" height="100%" viewBox="0 0 95 50" xmlns="http://www.w3.org/2000/svg">
+                <g stroke="green" fill="white" stroke-width="5">
+                    <circle cx="25" cy="25" r="15" />
+                    <circle cx="40" cy="25" r="15" />
+                    <circle cx="55" cy="25" r="15" />
+                    <circle cx="70" cy="25" r="15" />
+                </g>
+            </svg>-->
+        </div>
+    </div>
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+    <script src="./js/myalert.js"></script>
+    <script src="./js/table2excel.js"></script>
+    <!--<script src="./js/jquery-jvectormap-2.0.3.min.js"></script>-->
+    <!--<script src="./js/jquery-jvectormap-world-mill-en.js"></script>-->
+    <script src="./js/d3.min.js"></script>
+    <!--<script src="./js/paint.js"></script>-->
+    <script src="./js/domain_tree.js"></script>
+    <!--<script src="./js/dns.js"></script>-->
+    <script>
+        var obj = {
+            "name": "kq88.com",
+            "children": []
+        }
+
+        var ip_list = $("[data-sort-ip]")
+
+        for (var i = 0; i < ip_list.length; i++) {
+            var ipObj = {
+                "name": $(ip_list[i]).attr("data-sort-ip"),
+                "children": []
+            }
+            var domainDOM = $(ip_list[i]).find("div")
+            for (var j = 0; j < domainDOM.length; j++) {
+                var tempObj = {
+                    "name": $(domainDOM[j]).attr("data-domain")
+                }
+                ipObj.children.push(tempObj)
+            }
+            obj.children.push(ipObj)
+        }
+        window.sessionStorage["chartObj"] = JSON.stringify(obj)
+        console.log(window.sessionStorage["chartObj"])
+        domainPaint(window.sessionStorage["chartObj"], "1000px", "8000px")
+    </script>
+</body>
+
+</html>

@@ -53,8 +53,8 @@ $(function () {
 
     //webscoket
     // 192.168.1.172:8888/result_ws
-    // var wsURI = 'ws://' + window.location.host + '/result_ws'
-    var wsURI = 'ws://192.168.0.112:8888/result_ws_test'
+    var wsURI = 'ws://' + window.location.host + '/result_ws_test'
+    // var wsURI = 'ws://192.168.0.112:8888/result_ws_test'
     var webSocket = new WebSocket(wsURI);
     webSocket.onerror = function (event) {
         console.log(event.data);
@@ -71,7 +71,7 @@ $(function () {
             var type = data.type;
             switch (type) {
                 case 'domain_detail': //whois ns mx
-                    console.log(JSON.stringify(data))
+                    // console.log(JSON.stringify(data))
                     whois(data)
                     paint(data)
                     break;
@@ -80,7 +80,7 @@ $(function () {
                     ip_his(data)
                     break;
                 case 'sub_domain':   //子域名
-                    // console.log(JSON.stringify(data))
+                    console.log(JSON.stringify(data))
                     subdomain(data)
                     break;
                 case 'domain_state': //子域名状态
@@ -102,8 +102,8 @@ $(function () {
 
     function start() {
         //向服务器发送请求  
-        // var obj = { "domain": getQueryString("domain") }
-        var obj = { "domain": "kq88.com" }
+        var obj = { "domain": getQueryString("content") }
+        // var obj = { "domain": "kq88.com" }
         webSocket.send(JSON.stringify(obj));
     }
 
@@ -134,7 +134,6 @@ $(function () {
                 $(".table-whois tbody").append(templateRow)
             }
         }
-        console.log($(".table-whois tbody").find("tr").length)
         if ($(".table-whois tbody").find("tr").length === 0) {
             $(".table-whois").css("display", "none")
             $(".nowhois").css("display", "block")
@@ -179,6 +178,14 @@ $(function () {
                         $($("[data-sort-ip='" + subdomain[i].ip + "']").find("td").get(2)).append(`${subdomain[i].sub_domain} ${subdomain[i].location === "" ? `` : `<span class="flag flag-${subdomain[i].location.toLocaleLowerCase()}"></span>`}<br>`)
                         $($("[data-sort-ip='" + subdomain[i].ip + "']").find("td").get(3)).append(`<div data-domain=${subdomain[i].sub_domain}></div>`)
                     }
+                }
+            }
+
+            ips = subdomain[i].ip.split(",")
+            for (len = 0; len < ips.length; len++) {
+                if (ips[len] && subdomain[i].sub_domain) {
+                    console.log(123)
+                    appendData("kq88.com", [{ "ip": ips[len], 'subdomain': subdomain[i].sub_domain }]);
                 }
             }
         }
@@ -246,7 +253,7 @@ $(function () {
             var ip_l = ip.split(",")
             var str = ""
             for (var i = 0; i < ip_l.length; i++) {
-                str += "<i data-toggle='tooltip' title='端口扫描' data-parent=" + domain + " data-ip=" + ip_l[i] + " class='fa fa-eye'></i> <span data-search-ip='" + ip_l[i] +"'>" + ip_l[i] + "</span><br>"
+                str += "<i data-toggle='tooltip' title='端口扫描' data-parent=" + domain + " data-ip=" + ip_l[i] + " class='fa fa-eye'></i> <span data-search-ip='" + ip_l[i] + "'>" + ip_l[i] + "</span><br>"
             }
             return str
         }
@@ -282,12 +289,12 @@ $(function () {
         $(".more-info").empty()
         var portInfo_temp = `
             <p>IP地址: ${data.ip_info.ip.ip} <a href="${data.ip_info.ip.ip}"><i class="fa fa-external-link" style="color:lightblue;"></i></a></p>
-                    <p>协议: ${data.domain_info.cms.cms}</p>
-                    <p>CMS信息: ${data.ip_info.ip.web_info.product}</p>
-                    <p>产品: ${data.ip_info.ip.web_info.name}</p>
-                    <p>产品名: ${data.ip_info.ip.web_info.extrainfo}</p>
-                    <p>版本号: ${data.ip_info.ip.web_info.version}</p>
-                    <p>更新时间: ${data.domain_info.sync_time}</p>
+                    <p>协议: ${data.domain_info.cms ? data.domain_info.cms.cms : ``}</p>
+                    <p>CMS信息: ${data.ip_info.web_info ? data.ip_info.ip.web_info.product : ``}</p>
+                    <p>产品: ${data.ip_info.web_info ? data.ip_info.ip.web_info.name : ``}</p>
+                    <p>产品名: ${data.ip_info.web_info ? data.ip_info.ip.web_info.extrainfo : ``}</p>
+                    <p>版本号: ${data.ip_info.web_info ? data.ip_info.ip.web_info.version : ``}</p>
+                    <p>更新时间: ${data.ip_info.sync_time ? data.domain_info.sync_time : ``}</p>
         `
         $(".port-info").append(portInfo_temp)
 
@@ -340,7 +347,6 @@ $(function () {
         }
 
         if (site_record) {
-            console.log(JSON.stringify(site_record))
             for (var j = 0; j < site_record.length; j++) {
                 for (var key in site_record[j]) {
                     siteObj['name'] = key

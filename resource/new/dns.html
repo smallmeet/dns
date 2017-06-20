@@ -85,13 +85,16 @@
                                     </thead>
                                     <tbody></tbody>
                                 </table>
+                                <div class="more-wrapper">
+                                    <button class="btn btn-default more">更多</button>
+                                </div>
                                 <h2 class="nowhois">没有匹配的子域名</h2>
                             </div>
                         </div>
                         <div id="subdomain">
-                            <p class="title">子域名<span style="font-size: 0.8em; color: #777;"> ** 数据可能不是最新，来自静态数据库(每周更新)</span></p>
+                            <p class="title">子域名<span style="font-size: 0.8em; color: #777;"> ** 数据可能不是最新，来自静态数据库(每日更新)</span></p>
                             <div class="input-group col-md-6">
-                                <div class="input-group-addon sort" disabled><i class="fa fa-sort-alpha-desc"></i> IP排序</div>
+                                <div class="input-group-addon sort complete" disabled><i class="fa fa-sort-alpha-desc"></i> IP排序</div>
                                 <input type="text" class="form-control" id="filter_text" placeholder="输入域名允许的字符">
                                 <div class="input-group-addon filter" disabled><i class="fa fa-eraser"></i> 筛选</div>
                             </div>
@@ -99,10 +102,10 @@
                                 <table class="table domain" style="font-size: 1.1em; border-color: #777;">
                                     <thead>
                                         <tr>
-                                            <th>Domain</th>
-                                            <th>Date</th>
+                                            <th>域名</th>
+                                            <th>检测时间</th>
                                             <th>IP</th>
-                                            <th>Status</th>
+                                            <th>状态</th>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -122,9 +125,9 @@
                             </div>
                         </div>
                         <div style="margin: 30px;" align="center"><button id="download" type="button" class="btn btn-default"><span class="glyphicon glyphicon-download" aria-hidden="true"></span> 下载子域名列表文件</button></div>
-                        <p class=title>子域名关系图</p>
-                        <div id="tree_domain_svg"></div>
-                        <p class="title">Mapping the domain</p>
+                        <!--<p class=title>子域名关系图</p>
+                        <div id="tree_domain_svg"></div>-->
+                        <p class="title">域名分析图</p>
                     </div>
                 </div>
             </div>
@@ -202,7 +205,7 @@
     <script src="./js/jquery-jvectormap-world-mill-en.js"></script>
     <script src="./js/d3.min.js"></script>
     <script src="./js/paint.js"></script>
-    <script src="./js/domain_tree.js"></script>
+    <script src="./js/config.js"></script>
     <script src="./js/dns.js"></script>
 </body>
 

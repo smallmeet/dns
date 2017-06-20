@@ -1,10 +1,11 @@
 $(function () {
+    // console.log(config)
     var domainData = {}
     setMap()
 
     //获取url参数
-    let getQueryString = function (parm) {
-        let reg = new RegExp("(^|&)" + parm + "=([^&]*)(&|$)"),
+    var getQueryString = function (parm) {
+        var reg = new RegExp("(^|&)" + parm + "=([^&]*)(&|$)"),
             r = window.location.search.substr(1).match(reg);
         return r ? unescape(decodeURI(decodeURI(r[2]))) : null;
     };
@@ -41,10 +42,11 @@ $(function () {
     });
 
     $("#download").click(function () {
+        var date = new Date()
         $(".table2excel").table2excel({
             exclude: ".noExl",
             name: "Excel Document Name",
-            filename: "myFileName",
+            filename: "domains_" + date.getFullYear() + "-" + (date.getMouth + 1) + "-" + date.getDate(),
             exclude_img: true,
             exclude_links: true,
             exclude_inputs: true
@@ -54,7 +56,7 @@ $(function () {
     //webscoket
     // 192.168.1.172:8888/result_ws
     // var wsURI = 'ws://' + window.location.host + '/result_ws'
-    var wsURI = 'ws://192.168.0.112:8888/result_ws_test'
+    var wsURI = config.test.ws
     var webSocket = new WebSocket(wsURI);
     webSocket.onerror = function (event) {
         console.log(event.data);
@@ -80,7 +82,7 @@ $(function () {
                     ip_his(data)
                     break;
                 case 'sub_domain':   //子域名
-                    console.log(JSON.stringify(data))
+                    // console.log(JSON.stringify(data))
                     subdomain(data)
                     break;
                 case 'domain_state': //子域名状态
@@ -91,7 +93,7 @@ $(function () {
                     break;
                 case 'task_over':
                     console.log("连接结束")
-                    if (!$(".filter").hasClass("complete")) $(".filter").addClass("complete")
+                    if (!$(".filter").hasClass("complete") && !$(".sort").hasClass("complete")) $(".filter").addClass("complete")
                     if (!$(".sort").hasClass("complete")) $(".sort").addClass("complete")
                     break;
 
@@ -103,8 +105,8 @@ $(function () {
     function start() {
         //向服务器发送请求  
         // var obj = { "domain": getQueryString("domain") }
-        var obj = { "domain": "kq88.com" }
-        webSocket.send(JSON.stringify(obj));
+        // console.log(config.test.domain)
+        webSocket.send(JSON.stringify(config.test.domain));
     }
 
     function ip_his(data) {
@@ -126,7 +128,7 @@ $(function () {
         for (var key in whois) {
             if (whois[key] !== "null" && whois[key] !== null) {
                 var templateRow = `
-                    <tr>
+                    <tr class="${isImportant(key)}">
                         <td>${whois_info[key] ? whois_info[key] : key}</td>
                         <td>${whois[key]}</td>
                     </tr>
@@ -148,9 +150,9 @@ $(function () {
             // normal table
             var templateRow = `
                 <tr>
-                    <td data-select="${subdomain[i].sub_domain}" class="col-md-3">${subdomain[i].sub_domain} ${subdomain[i].location === "" ? `` : `<span class="flag flag-${subdomain[i].location.toLocaleLowerCase()}"></span>`}<br></td>
+                    <td data-select="${subdomain[i].sub_domain}" class="col-md-3">${subdomain[i].sub_domain}<br><span class="cms cms-server" data-toggle="tooltip" title="查看CMS">Nginx</span> <span class="cms cms-pdt" data-toggle="tooltip" title="查看CMS">thinkphp</span> <br></td>
                     <td>${subdomain[i].last_commit_time}</td>
-                    <td>${modalStr(subdomain[i].ip, subdomain[i].sub_domain)}</td>
+                    <td>${modalStr(subdomain[i].ip, subdomain[i].sub_domain, subdomain[i].location.toLocaleLowerCase())}</td>
                     <td><div data-domain=${subdomain[i].sub_domain}></div></td>
                 </tr>
             `
@@ -167,31 +169,23 @@ $(function () {
                         ipArr.push(ip_l[j])
                         var sortTempRow = `
                         <tr data-sort-ip=${subdomain[i].ip}>
-                            <td><i data-toggle='tooltip' title='端口扫描' data-parent="${subdomain[i].sub_domain}" data-ip="${ip_l[j]}" class='fa fa-eye'></i> <span data-search-ip="${ip_l[j]}">${ip_l[j]}</span><br></td>
+                            <td><i data-toggle='tooltip' title='端口扫描' data-parent="${subdomain[i].sub_domain}" data-ip="${ip_l[j]}" class='fa fa-eye'></i> <span data-search-ip="${ip_l[j]}">${ip_l[j]}</span> ${subdomain[i].location === "" ? `` : `<span class="flag flag-${subdomain[i].location.toLocaleLowerCase()}"></span>`}<br></td>
                             <td>${subdomain[i].last_commit_time}</td>
-                            <td data-select="${subdomain[i].sub_domain}" class="col-md-3">${subdomain[i].sub_domain} ${subdomain[i].location === "" ? `` : `<span class="flag flag-${subdomain[i].location.toLocaleLowerCase()}"></span>`}<br></td>
+                            <td data-select="${subdomain[i].sub_domain}" class="col-md-3"><span class="sort-domain">${subdomain[i].sub_domain}</span></td>
                             <td><div data-domain=${subdomain[i].sub_domain}></div></td>
                         </tr>
                     `
                         $(".sort-table tbody").append(sortTempRow)
                     } else {
-                        $($("[data-sort-ip='" + subdomain[i].ip + "']").find("td").get(2)).append(`${subdomain[i].sub_domain} ${subdomain[i].location === "" ? `` : `<span class="flag flag-${subdomain[i].location.toLocaleLowerCase()}"></span>`}<br>`)
+                        $($("[data-sort-ip='" + subdomain[i].ip + "']").find("td").get(2)).append(`<span  class="sort-domain">${subdomain[i].sub_domain}</span>`)
                         $($("[data-sort-ip='" + subdomain[i].ip + "']").find("td").get(3)).append(`<div data-domain=${subdomain[i].sub_domain}></div>`)
                     }
-                }
-            }
-
-            ips = subdomain[i].ip.split(",")
-            for (len = 0; len < ips.length; len++) {
-                if (ips[len] && subdomain[i].sub_domain) {
-                    console.log(123)
-                    appendData("kq88.com", [{ "ip": ips[len], 'subdomain': subdomain[i].sub_domain }]);
                 }
             }
         }
         // console.log(refreshData)
         refresh(refreshData)
-        domainSelect()
+        // domainSelect()
     }
 
     function status(data) {
@@ -200,13 +194,13 @@ $(function () {
             case 1:
             case 2:
             case 3:
-                $("[data-domain='" + data.domain + "']").append(`<span class="label label-warning"><i class="fa  fa-unlink"></i> 服务器无法访问</span>`)
+                $("[data-domain='" + data.domain + "']").append(`<span class="label label-warning"><i class="fa  fa-unlink"></i></span>`)
                 break;
             case 0:
-                $("[data-domain='" + data.domain + "']").append(`<span class="label label-danger"><i class="fa  fa-ban"></i> 域名不存在</span>`)
+                $("[data-domain='" + data.domain + "']").append(`<span class="label label-danger"><i class="fa  fa-ban"></i></span>`)
                 break;
             case 4:
-                $("[data-domain='" + data.domain + "']").append(`<span class="label label-primary"><i class="fa  fa-send"></i> 正常</span>`)
+                $("[data-domain='" + data.domain + "']").append(`<span class="label label-success"><i class="fa  fa-check"></i></span>`)
                 break;
         }
     }
@@ -246,14 +240,16 @@ $(function () {
         setMap();
     }
 
-    function modalStr(ip, domain) {
+    function modalStr(ip, domain, location) {
         if (ip === "") {
             return "无"
         } else {
             var ip_l = ip.split(",")
+            var location_l = location.split(",")
+            // console.log(locat)
             var str = ""
             for (var i = 0; i < ip_l.length; i++) {
-                str += "<i data-toggle='tooltip' title='端口扫描' data-parent=" + domain + " data-ip=" + ip_l[i] + " class='fa fa-eye'></i> <span data-search-ip='" + ip_l[i] + "'>" + ip_l[i] + "</span><br>"
+                str += "<i data-toggle='tooltip' title='端口扫描' data-parent=" + domain + " data-ip=" + ip_l[i] + " class='fa fa-eye'></i> <span data-search-ip='" + ip_l[i] + "'>" + ip_l[i] + "</span> <span class='flag flag-"+ location_l[i] +"'></span><br>"
             }
             return str
         }
@@ -284,17 +280,18 @@ $(function () {
     //点击查看端口信息
     $(document).on("click", ".port-success", function () {
         var data = JSON.parse(localStorage[$(this).attr("data-parent") + " " + $(this).attr("data-ip")])
-        console.log(data)
+        // console.log(data)
         $(".port-info").empty()
         $(".more-info").empty()
+        
         var portInfo_temp = `
             <p>IP地址: ${data.ip_info.ip.ip} <a href="${data.ip_info.ip.ip}"><i class="fa fa-external-link" style="color:lightblue;"></i></a></p>
-                    <p>协议: ${data.domain_info.cms.cms}</p>
-                    <p>CMS信息: ${data.ip_info.ip.web_info.product}</p>
-                    <p>产品: ${data.ip_info.ip.web_info.name}</p>
-                    <p>产品名: ${data.ip_info.ip.web_info.extrainfo}</p>
-                    <p>版本号: ${data.ip_info.ip.web_info.version}</p>
-                    <p>更新时间: ${data.domain_info.sync_time}</p>
+                    <p>协议: ${data.domain_info.cms ? data.domain_info.cms.cms : ``}</p>
+                    <p>CMS信息: ${data.ip_info.web_info ? data.ip_info.ip.web_info.product : ``}</p>
+                    <p>产品: ${data.ip_info.web_info ? data.ip_info.ip.web_info.name : ``}</p>
+                    <p>产品名: ${data.ip_info.web_info ? data.ip_info.ip.web_info.extrainfo : ``}</p>
+                    <p>版本号: ${data.ip_info.web_info ? data.ip_info.ip.web_info.version : ``}</p>
+                    <p>更新时间: ${data.ip_info.sync_time ? data.domain_info.sync_time : ``}</p>
         `
         $(".port-info").append(portInfo_temp)
 
@@ -358,11 +355,11 @@ $(function () {
                     }
                 }
             }
-            console.log(siteObj)
+            // console.log(siteObj)
             svgJson.children[2].children.push(siteObj)
         }
 
-        // console.log(svgJson)
+        // console.log(JSON.stringify(svgJson))
         svgPaint(JSON.stringify(svgJson))
     }
 
@@ -424,6 +421,20 @@ $(function () {
     //点击排序按钮
     $(document).on("click", ".sort.complete", function () {
         sort()
+    })
+
+    //whois important
+    function isImportant(key) {
+        if (key === "updated_date" || key === "expiration_date" || key === "address" || key === "whois_server" || key === "name_servers" || key === "emails") {
+            // return "important"
+        } else {
+            return "not-important"
+        }
+    }
+
+    //more whois 
+    $(".more").on("click", function () {
+        $(".not-important").removeClass("not-important")
     })
 });
 

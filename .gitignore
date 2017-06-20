@@ -1,9 +1,0 @@
-*.log
-*.pyc
-static/img/avatar/*.png
-.idea/
-*.sock
-*.pid
-static/*.html
-static/*.json
-test/
