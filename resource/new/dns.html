@@ -96,7 +96,7 @@
                             <div class="input-group col-md-6">
                                 <div class="input-group-addon sort complete" disabled><i class="fa fa-sort-alpha-desc"></i> IP排序</div>
                                 <input type="text" class="form-control" id="filter_text" placeholder="输入域名允许的字符">
-                                <div class="input-group-addon filter" disabled><i class="fa fa-eraser"></i> 筛选</div>
+                                <div class="input-group-addon filter complete" disabled><i class="fa fa-eraser"></i> 筛选</div>
                             </div>
                             <div class="table-responsive table2excel" style="text-align: left;">
                                 <table class="table domain" style="font-size: 1.1em; border-color: #777;">
@@ -105,7 +105,7 @@
                                             <th>域名</th>
                                             <th>检测时间</th>
                                             <th>IP</th>
-                                            <th>状态</th>
+                                            <th>状态 <span id="domain-status" class="label label-primary" data-toggle="tooltip" title="切换状态"><i class="fa  fa-unsorted"></i></span><span class="status-info"> 全部</span></th>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -124,7 +124,8 @@
                                 <h2 class="nofilter">没有匹配的子域名</h2>
                             </div>
                         </div>
-                        <div style="margin: 30px;" align="center"><button id="download" type="button" class="btn btn-default"><span class="glyphicon glyphicon-download" aria-hidden="true"></span> 下载子域名列表文件</button></div>
+                        <div style="margin: 30px;" align="center"><button id="download" type="button" class="btn btn-default"><i class="fa fa-cloud-download" aria-hidden="true"></i> 下载子域名列表文件</button></div>
+                        <div style="margin: 30px;" align="center"><button id="chart" type="button" class="btn btn-success"><i class="fa fa-sitemap"></i> 查看子域名关系图</button></div>
                         <!--<p class=title>子域名关系图</p>
                         <div id="tree_domain_svg"></div>-->
                         <p class="title">域名分析图</p>
@@ -132,9 +133,21 @@
                 </div>
             </div>
             <div id="svg">
-                    
+
             </div>
         </div>
+    </div>
+    <div class="pageloader3">
+        <div class="spinner">
+            <div class="loader">
+                <div class="circle"></div>
+                <div class="circle"></div>
+                <div class="circle"></div>
+                <div class="circle"></div>
+                <div class="circle"></div>
+            </div>
+        </div>
+        <span>数据加载中...</span>
     </div>
     <button class="button go-top" type="button">
         <svg width="16" height="16" viewBox="0 0 17 17" xmlns="http://www.w3.org/2000/svg" class="Icon Icon--backToTopArrow" aria-hidden="true" style="height: 16px; width: 16px; fill: #9aaabf;" >

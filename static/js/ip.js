@@ -21,7 +21,8 @@ $(document).ready(function () {
     //webscoket
     // 192.168.1.172:8888/result_ws
     // var wsURI = 'ws://' + window.location.host + '/result_ws'
-    var wsURI = 'ws://192.168.0.112:8888/reverse_ip_result_ws'
+    // var wsURI = 'ws://192.168.0.112:8888/reverse_ip_result_ws'
+    var wsURI = env_config['reverse_ip_result_ws'];
     var webSocket = new WebSocket(wsURI);
     webSocket.onerror = function (event) {
         console.log(event.data);

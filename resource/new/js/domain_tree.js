@@ -105,7 +105,7 @@ function domainPaint(root, width, height) {
 
     // size of the diagram
     var viewerWidth = $(document).width();
-    var viewerHeight = $(document).height();
+    var viewerHeight = height;
 
     var tree = d3.layout.tree()
     // .size([viewerHeight, viewerWidth]);
@@ -140,7 +140,7 @@ function domainPaint(root, width, height) {
 
     var baseSvg = d3.select("#svg").append("svg")
         .attr("width", viewerWidth)
-        .attr("height", "8000px")
+        .attr("height", viewerHeight)
         .attr("class", "overlay")
 
     function update(source) {
@@ -157,7 +157,7 @@ function domainPaint(root, width, height) {
             }
         };
         childCount(0, root);
-        var newHeight = d3.max(levelWidth) * 35; // 25 pixels per line  
+        var newHeight = d3.max(levelWidth) * 40; // 25 pixels per line  
         tree = tree.size([newHeight, viewerWidth]);
 
         var nodes = tree.nodes(root).reverse(),
@@ -188,7 +188,6 @@ function domainPaint(root, width, height) {
 
         var link = svgGroup.selectAll("path.link")
             .data(links, function (d) {
-                console.log(d.target.id)
                 return d.target.id;
             });
 

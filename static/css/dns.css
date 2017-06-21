@@ -83,6 +83,14 @@ font-size: 1.4em;
   text-align: left;
 }
 
+#whois {
+  margin-bottom: 20px;
+}
+
+.more-wrapper {
+  text-align: center;
+}
+
 .table-whois > tbody > tr > td{
     /*text-align: center;*/
     word-break: break-all;
@@ -104,6 +112,7 @@ border-color: #777;
 
 [data-domain] {
   margin-bottom: 7px;
+  cursor: pointer;
 }
 
 tr {
@@ -403,6 +412,16 @@ i[data-parent] {
   border-color: #269abc;
 }
 
+#subdomain {
+  display: none;
+}
+#download {
+  display: none;
+}
+#chart {
+  display: none;
+}
+
 .filter {
     cursor: not-allowed;
 }
@@ -474,3 +493,196 @@ i[data-parent] {
   stroke-width: 1.5px;
 }
 
+#tree_domain_svg {
+  border-bottom: 1px solid;
+  margin-bottom: 10px;
+}
+
+.cms {
+  background: #3e773e;
+  padding: 1px 2px 3px;
+  border-radius: 2px;
+  vertical-align: middle;
+  cursor: pointer;
+  font-family: "SumHei";
+  color: white;
+}
+
+.cms.cms-server {
+  background: #3e773e;
+}
+
+.cms.cms-pdt {
+  background: #056d96;
+}
+
+.important {
+  display: table-row;
+}
+
+.not-important {
+  display: none;
+}
+
+.g-content {
+  height: 8000px;
+  width: 100%;
+}
+
+.sort-domain {
+  display: block;
+  margin-bottom: 7px;
+}
+
+span.label i {
+  vertical-align: middle;
+}
+
+
+
+/*loading animate*/
+/*.loading {
+    position: relative;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 60px;
+    background: rgba(0, 0, 0, 0.4);
+}*/
+
+.pageloader3 {
+  position: fixed;
+  top: 100px;
+  right: 5%;
+  text-align: left;
+    
+}
+
+.pageloader3 .spinner {
+    /*display: inline-block;*/
+    margin-bottom: 10px;
+}
+.pageloader3 .loader {
+    width: 40px;
+    height:40px;
+    margin: auto;
+    padding-top: 0px;
+}
+.pageloader3 .loader .circle {
+    position: absolute;
+    width: 38px;
+    height: 38px;
+    opacity: 0;
+    transform: rotate(225deg);
+    -webkit-animation-iteration-count: infinite;
+    -moz-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+    -webkit-animation-name: orbit;
+    -moz-animation-name: orbit;
+    animation-name: orbit;
+    -webkit-animation-duration: 5.5s;
+    -moz-animation-duration: 5.5s;
+    animation-duration: 5.5s;
+}
+.pageloader3 .loader .circle:after {
+    content: '';
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    border-radius: 5px;
+    background: white;
+    /* Pick a color */
+}
+.pageloader3 .loader .circle:nth-child(2) {
+    -webkit-animation-delay: 240ms;
+    -moz-animation-delay: 240ms;
+    animation-delay: 240ms;
+}
+.pageloader3 .loader .circle:nth-child(3) {
+    -webkit-animation-delay: 480ms;
+    -moz-animation-delay: 480ms;
+    animation-delay: 480ms;
+}
+.pageloader3 .loader .circle:nth-child(4) {
+    -webkit-animation-delay: 720ms;
+    -moz-animation-delay: 720ms;
+    animation-delay: 720ms;
+}
+.pageloader3 .loader .circle:nth-child(5) {
+    -webkit-animation-delay: 960ms;
+    -moz-animation-delay: 960ms;
+    animation-delay: 960ms;
+}
+@-webkit-keyframes orbit {
+    0% {
+        transform: rotate(225deg);
+        opacity: 1;
+        animation-timing-function: ease-out;
+    }
+    7% {
+        transform: rotate(345deg);
+        animation-timing-function: linear;
+    }
+    30% {
+        transform: rotate(455deg);
+        animation-timing-function: ease-in-out;
+    }
+    39% {
+        transform: rotate(690deg);
+        animation-timing-function: linear;
+    }
+    70% {
+        transform: rotate(815deg);
+        opacity: 1;
+        animation-timing-function: ease-out;
+    }
+    75% {
+        transform: rotate(945deg);
+        animation-timing-function: ease-out;
+    }
+    76% {
+        transform: rotate(945deg);
+        opacity: 0;
+    }
+    100% {
+        transform: rotate(945deg);
+        opacity: 0;
+    }
+}
+@keyframes orbit {
+    0% {
+        transform: rotate(225deg);
+        opacity: 1;
+        animation-timing-function: ease-out;
+    }
+    7% {
+        transform: rotate(345deg);
+        animation-timing-function: linear;
+    }
+    30% {
+        transform: rotate(455deg);
+        animation-timing-function: ease-in-out;
+    }
+    39% {
+        transform: rotate(690deg);
+        animation-timing-function: linear;
+    }
+    70% {
+        transform: rotate(815deg);
+        opacity: 1;
+        animation-timing-function: ease-out;
+    }
+    75% {
+        transform: rotate(945deg);
+        animation-timing-function: ease-out;
+    }
+    76% {
+        transform: rotate(945deg);
+        opacity: 0;
+    }
+    100% {
+        transform: rotate(945deg);
+        opacity: 0;
+    }
+}

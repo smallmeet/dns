@@ -549,7 +549,7 @@ class ResultWebSocketRealHandler(WebSocketHandler):
                     response_json['sub_domains'].append({
                         'sub_domain': per_sub_domain.subdomain,
                         'ip': per_sub_domain.ip,
-                        'location': get_location_abbr(per_sub_domain.location),
+                        'location': ','.join([get_location_abbr(i) for i in per_sub_domain.location.split(',')]),
                         'origin': per_sub_domain.origin,
                         'last_commit_time': per_sub_domain.last_commit_time.strftime('%Y-%m-%d %H:%M:%S')
                     })

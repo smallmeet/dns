@@ -7,11 +7,15 @@ var svg = d3.select("#svg")
     .attr("height", height)
 
 var gTree = svg.append("g")
-    .attr("transform", "translate(350,0)")
+    .attr("transform", "translate(350,50)")
 
+
+var margin = { top: 20, right: 120, bottom: 20, left: 120 },
+    width = 960 - margin.right - margin.left,
+    height = 720 - margin.top - margin.bottom;
 
 var tree = d3.layout.tree()
-    .size(['100%', "100%"])
+    .size([height, width])
     .separation(function (a, b) {
         return a.parent == b.parent ? 1 : 2
     })
@@ -115,10 +119,15 @@ d3.textBlock = function () {
 }
 
 var tb = d3.textBlock().label(function (d) { return d.name; });
+
+
 function svgPaint(root) {
     root = JSON.parse(root)
     var nodes = tree.nodes(root)
     var links = tree.links(nodes)
+
+    // console.log(nodes)
+    // console.log(links)
 
     var link = gTree.selectAll(".link")
         .data(links)

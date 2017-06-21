@@ -77,3 +77,10 @@ class ReverseIpLookUpNewHandler(BaseHandler):
     def get(self, *args, **kwargs):
         ip = self.get_argument('ip', '')
         self.render('ip.html', ip=ip)
+
+
+class ChartHandler(BaseHandler):
+
+    @tornado.web.authenticated
+    def get(self, *args, **kwargs):
+        self.render('chart.html')

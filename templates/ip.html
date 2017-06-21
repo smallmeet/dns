@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>域名分析系统</title>
     <link rel="stylesheet" href="{{ static_url('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ static_url('css/dns.css') }}">
     <link rel="stylesheet" href="{{ static_url('css/jquery-jvectormap-2.0.3.css') }}">
@@ -16,12 +16,12 @@
 <body>
     <div class="header-wrapper">
         <img class="logo" src="{{ static_url('img/logo1.png') }}" alt="">
-        <span class="c_name">域名信息分析系统</span>
+        <span class="c_name">域名分析系统</span>
         <div class="header">
             <div class="header-inner" data-toggle="dropdown" class="dropdown-toggle">
-                <div class="mini-avatar">
-                    <img src="{{ static_url('img/avatar.png') }}" alt="avatar">
-                </div>
+                <!--<div class="mini-avatar">-->
+                    <!--<img src="{{ static_url('img/avatar.png') }}" alt="avatar">-->
+                <!--</div>-->
                 <span>tom</span>
                 <b class="caret"></b>
                 <!--<button id="logout" class="btn btn-primary" type="button">登出</button>-->
@@ -111,6 +111,7 @@
             </div>
         </div>
     </div>
+    <script src="{{ static_url('js/config.js') }}"></script>
     <script src="{{ static_url('js/jquery.min.js') }}"></script>
     <script src="{{ static_url('js/bootstrap.min.js') }}"></script>
     <script src="{{ static_url('js/myalert.js') }}"></script>

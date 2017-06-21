@@ -14,7 +14,7 @@ from handlers.login import LoginHandler, LogoutHandler, ModifyPasswordHandler
 from handlers.result import ResultHandler, ResultWebSocketHandler, AddBruteTaskHandler, BruteProgressHandler, \
     ResultAsyncHandler, ResultWebSocketRealHandler, IpReverseWebSocketHandler
 from handlers.result import WhoisHandler
-from handlers.result_new import ResultNewHandler, ReverseIpLookUpNewHandler
+from handlers.result_new import ResultNewHandler, ReverseIpLookUpNewHandler, ChartHandler
 from handlers.reverse_ip_lookup import ReverseIpLookupHandler, ReverseIpLookupAsyncHandler
 from handlers.search import SearchHandler, SearchNewHandler
 from handlers.usermanager import UserAdd, DeleteUserHandler, ModifyPasswordAdminHandler, AdminHandler
@@ -73,7 +73,8 @@ application = tornado.web.Application([
     (r'/search_new', SearchNewHandler),
     (r'/result_new', ResultNewHandler),
     (r'/reverse_ip_result_ws', IpReverseWebSocketHandler),
-    (r'/reverse_ip_lookup_new', ReverseIpLookUpNewHandler)
+    (r'/reverse_ip_lookup_new', ReverseIpLookUpNewHandler),
+    (r'/chart', ChartHandler)
 ], **settings)
 
 if __name__ == '__main__':

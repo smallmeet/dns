@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>域名分析系统</title>
     <link rel="stylesheet" href="{{ static_url('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ static_url('css/dns.css') }}">
     <link rel="stylesheet" href="{{ static_url('css/jquery-jvectormap-2.0.3.css') }}">
@@ -19,9 +19,9 @@
         <span class="c_name">域名信息分析系统</span>
         <div class="header">
             <div class="header-inner" data-toggle="dropdown" class="dropdown-toggle">
-                <div class="mini-avatar">
-                    <img src="{{ static_url('img/avatar.png') }}" alt="avatar">
-                </div>
+                <!--<div class="mini-avatar">-->
+                    <!--<img src="{{ static_url('img/avatar.png') }}" alt="avatar">-->
+                <!--</div>-->
                 <span>tom</span>
                 <b class="caret"></b>
                 <!--<button id="logout" class="btn btn-primary" type="button">登出</button>-->
@@ -33,7 +33,7 @@
             </ul>
         </div>
     </div>
-<div class="wrapper">
+    <div class="wrapper">
         <div class="inner-wrapper">
             <div class="container fix">
                 <div class="cover-container">
@@ -85,13 +85,16 @@
                                     </thead>
                                     <tbody></tbody>
                                 </table>
+                                <div class="more-wrapper">
+                                    <button class="btn btn-default more">更多</button>
+                                </div>
                                 <h2 class="nowhois">没有匹配的子域名</h2>
                             </div>
                         </div>
                         <div id="subdomain">
-                            <p class="title">子域名<span style="font-size: 0.8em; color: #777;"> ** 数据可能不是最新，来自静态数据库(每周更新)</span></p>
+                            <p class="title">子域名<span style="font-size: 0.8em; color: #777;"> ** 数据可能不是最新，来自静态数据库(每日更新)</span></p>
                             <div class="input-group col-md-6">
-                                <div class="input-group-addon sort" disabled><i class="fa fa-sort-alpha-desc"></i> IP排序</div>
+                                <div class="input-group-addon sort complete" disabled><i class="fa fa-sort-alpha-desc"></i> IP排序</div>
                                 <input type="text" class="form-control" id="filter_text" placeholder="输入域名允许的字符">
                                 <div class="input-group-addon filter" disabled><i class="fa fa-eraser"></i> 筛选</div>
                             </div>
@@ -99,10 +102,10 @@
                                 <table class="table domain" style="font-size: 1.1em; border-color: #777;">
                                     <thead>
                                         <tr>
-                                            <th>Domain</th>
-                                            <th>Date</th>
-                                            <th>IP</th>
-                                            <th>Status</th>
+                                            <th>域名</th>
+                                            <th>检测时间</th>
+                                            <th>域名对应IP</th>
+                                            <th>状态</th>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -111,9 +114,9 @@
                                     <thead>
                                         <tr>
                                             <th>IP</th>
-                                            <th>Date</th>
-                                            <th>Domain</th>
-                                            <th>Status</th>
+                                            <th>检测时间</th>
+                                            <th>IP对应域名</th>
+                                            <th>状态</th>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -121,16 +124,30 @@
                                 <h2 class="nofilter">没有匹配的子域名</h2>
                             </div>
                         </div>
-                        <div style="margin: 30px;" align="center"><button id="download" type="button" class="btn btn-default"><span class="glyphicon glyphicon-download" aria-hidden="true"></span> 下载子域名列表文件</button></div>
-                        <p class=title>子域名关系图</p>
-                        <div id="tree_domain_svg"></div>
-                        <p class="title">Mapping the domain</p>
+                        <div style="margin: 30px;" align="center"><button id="download" type="button" class="btn btn-default"><i class="fa fa-cloud-download" aria-hidden="true"></i> 下载子域名列表文件</button></div>
+                        <div style="margin: 30px;" align="center"><button id="chart" type="button" class="btn btn-success"><i class="fa fa-sitemap"></i> 查看子域名关系图</button></div>
+                        <!--<p class=title>子域名关系图</p>
+                        <div id="tree_domain_svg"></div>-->
+                        <p class="title">域名分析图</p>
                     </div>
                 </div>
             </div>
-            <div id="svg"></div>
+            <div id="svg">
 
+            </div>
         </div>
+    </div>
+    <div class="pageloader3">
+        <div class="spinner">
+            <div class="loader">
+                <div class="circle"></div>
+                <div class="circle"></div>
+                <div class="circle"></div>
+                <div class="circle"></div>
+                <div class="circle"></div>
+            </div>
+        </div>
+        <span>数据加载中...</span>
     </div>
     <button class="button go-top" type="button">
         <svg width="16" height="16" viewBox="0 0 17 17" xmlns="http://www.w3.org/2000/svg" class="Icon Icon--backToTopArrow" aria-hidden="true" style="height: 16px; width: 16px; fill: #9aaabf;" >
@@ -193,6 +210,7 @@
             </div>
         </div>
     </div>
+    <script src="{{ static_url('js/config.js') }}"></script>
     <script src="{{ static_url('js/jquery.min.js') }}"></script>
     <script src="{{ static_url('js/bootstrap.min.js') }}"></script>
     <script src="{{ static_url('js/myalert.js') }}"></script>
