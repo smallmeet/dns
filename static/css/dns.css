@@ -43,6 +43,10 @@ body {
   font-size: 1.1em;
 }
 
+.chart-body {
+  padding-top: 0;
+}
+
 .nounderline{text-decoration: none !important}
 
 h1 {
@@ -112,6 +116,10 @@ border-color: #777;
 
 [data-domain] {
   margin-bottom: 7px;
+  cursor: pointer;
+}
+
+#domain-status {
   cursor: pointer;
 }
 
@@ -401,15 +409,15 @@ i[data-parent] {
 
 .sort.complete {
   color: #FFF;
-  background-color: #5bc0de;
-  border-color: #46b8da;
+  background-color: #31b0d5;
+  border-color: #269abc;
   cursor: pointer;
 }
 
 .sort.complete:hover {
   color: #fff;
-  background-color: #31b0d5;
-  border-color: #269abc;
+      background-color: #21a0c5;
+    border-color: #2299bd;
 }
 
 #subdomain {
@@ -536,6 +544,13 @@ i[data-parent] {
 
 span.label i {
   vertical-align: middle;
+}
+
+.chart-title {
+  margin-bottom: 20px;
+  margin-left: 380px;
+  font-size: 30px;
+  text-align: left;
 }
 
 

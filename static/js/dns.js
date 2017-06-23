@@ -1,6 +1,11 @@
 $(function () {
     // console.log(config)
     var domainData = {}
+    var statusFilter = 0;//当前用户选择状态
+    var isFilter = false;//当前数据是否过滤
+    var reg_domain = ""//domain table过滤正则str
+    var reg_sort = ""//sort table过滤正则str
+    var label_status = ["label-success", "label-warning", "label-danger"]
     setMap()
 
     //获取url参数
@@ -82,7 +87,7 @@ $(function () {
                     ip_his(data)
                     break;
                 case 'sub_domain':   //子域名
-                    console.log(JSON.stringify(data))
+                    // console.log(JSON.stringify(data))
                     $("#subdomain").css("display", "block")
                     $("#download").css("display", "block")
                     $("#chart").css("display", "block")
@@ -96,8 +101,7 @@ $(function () {
                     break;
                 case 'task_over':
                     console.log("连接结束")
-                    if (!$(".filter").hasClass("complete") && !$(".sort").hasClass("complete")) $(".filter").addClass("complete")
-                    if (!$(".sort").hasClass("complete")) $(".sort").addClass("complete")
+                    // if (!$(".sort").hasClass("complete")) $(".sort").addClass("complete")
                     $(".pageloader3").css("display", "none")
                     break;
 
@@ -162,8 +166,13 @@ $(function () {
         // }
         for (var i = 0; i < subdomain.length; i++) {
             // normal table
+            var isShow = true
+            if (isFilter) {
+                var reg = new RegExp(reg_domain)
+                if (!reg.test(subdomain[i].sub_domain)) isShow = false
+            }
             var templateRow = `
-                <tr>
+                <tr style="display:${isShow ? 'table-row' : 'none'}">
                     <td data-select="${subdomain[i].sub_domain}" class="col-md-3">${subdomain[i].sub_domain}<br><!--<span class="cms cms-server" data-toggle="tooltip" title="查看CMS">Nginx</span> <span class="cms cms-pdt" data-toggle="tooltip" title="查看CMS">thinkphp</span> --><br></td>
                     <td>${subdomain[i].last_commit_time}</td>
                     <td>${modalStr(subdomain[i].ip, subdomain[i].sub_domain, subdomain[i].location.toLocaleLowerCase())}</td>
@@ -182,7 +191,7 @@ $(function () {
                     if ($.inArray(ip_l[j], ipArr) === -1) {
                         ipArr.push(ip_l[j])
                         var sortTempRow = `
-                        <tr data-sort-ip=${subdomain[i].ip}>
+                        <tr data-sort-ip=${ip_l[j]}>
                             <td><i data-toggle='tooltip' title='端口扫描' data-parent="${subdomain[i].sub_domain}" data-ip="${ip_l[j]}" class='fa fa-eye'></i> <span data-search-ip="${ip_l[j]}">${ip_l[j]}</span> ${subdomain[i].location === "" ? `` : `<span class="flag flag-${subdomain[i].location.split(",")[j].toLocaleLowerCase()}"></span>`}<br></td>
                             <td>${subdomain[i].last_commit_time}</td>
                             <td data-select="${subdomain[i].sub_domain}" class="col-md-3"><span class="sort-domain">${subdomain[i].sub_domain}</span></td>
@@ -208,13 +217,16 @@ $(function () {
             case 1:
             case 2:
             case 3:
-                $("[data-domain='" + data.domain + "']").append(`<span class="label label-warning"><i class="fa  fa-unlink"></i></span>`)
+                $("[data-domain='" + data.domain + "']").append(`<span class="label label-warning server-status" data-toggle="tooltip" title="无法访问"><i class="fa  fa-unlink"></i><span style="display:none;">无法访问</span></span>`)
+
                 break;
             case 0:
-                $("[data-domain='" + data.domain + "']").append(`<span class="label label-danger"><i class="fa  fa-ban"></i></span>`)
+                $("[data-domain='" + data.domain + "']").append(`<span class="label label-danger server-status" data-toggle="tooltip" title="不存在"><i class="fa  fa-ban"></i><span style="display:none;">不存在</span></span>`)
+
                 break;
             case 4:
-                $("[data-domain='" + data.domain + "']").append(`<span class="label label-success"><i class="fa  fa-check"></i></span>`)
+                $("[data-domain='" + data.domain + "']").append(`<span class="label label-success server-status" data-toggle="tooltip" title="正常"><i class="fa  fa-check"></i><span style="display:none;">正常</span></span>`)
+
                 break;
         }
     }
@@ -309,8 +321,9 @@ $(function () {
         `
         $(".port-info").append(portInfo_temp)
 
+        var port_info = JSON.parse(data.ip_info.ip.port_info)
         var moreInfo_temp = `
-            <pre>${data.ip_info.ip.port_info}</pre>
+            <pre style="text-align:left;">${port_info.dataset}</pre>
         `
         $(".more-info").append(moreInfo_temp)
         $("#port").modal("show")
@@ -385,39 +398,34 @@ $(function () {
     //域名 url title
     //筛选域名
     function domainSelect(str) {
-        // str = "0."
-        var reg_format = /[\s_\u4E00-\u9FA5\uF900-\uFA2D]/
-        if (reg_format.test(str)) {
-            myalert("域名不能包含空格、下划线和中文")
-            return;
-        }
-        var reg = new RegExp(str)
-        var tr_l = $(".domain tbody tr")
-        var mark = 0
-        for (var i = 0; i < tr_l.length; i++) {
-            // console.log($(tr_l[i]).find("td").get(0))
-            if (str === "") {
-                $(tr_l[i]).css("display", "table-row")
-                if (!$(".sort").hasClass("complete")) { $(".sort").addClass("complete") }
-            } else {
-                if ($(".sort").hasClass("complete")) { $(".sort").removeClass("complete") }
-                if (!reg.test($(tr_l[i]).find("td").get(0).getAttribute("data-select"))) {
-                    $(tr_l[i]).css("display", "none")
-                    mark++
-                } else {
-                    $(tr_l[i]).css("display", "table-row")
-                }
+        if ($(".domain").css("display") !== "none") {
+            statusFilter = 0
+            trigger_status()
+            str === "" ? isFilter = false : isFilter = true
+            var reg_format = /[\s_\u4E00-\u9FA5\uF900-\uFA2D]/
+            if (reg_format.test(str)) {
+                myalert("域名不能包含空格、下划线和中文", "tipwrong")
+                return;
+            }
+        } else {
+            var reg_format = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])(\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])){0,3}$/
+            console.log(reg_format.test(str))
+            if (str !== "" && !reg_format.test(str)) {
+                myalert("必须以数字开头结尾，只包含数字和点", "tipwrong")
+                return;
             }
         }
-        if (mark === tr_l.length) {
-            $(".nofilter").css("display", "block")
-        } else {
-            $(".nofilter").css("display", "none")
-        }
+        filter(str)
     }
 
     //点击筛选按钮
     $(document).on("click", ".filter.complete", function () {
+        if ($(".domain").css("display") !== "none") {
+            reg_domain = $("#filter_text").val()
+        } else {
+            reg_sort = $("#filter_text").val()
+        }
+
         domainSelect($("#filter_text").val())
     })
 
@@ -429,7 +437,7 @@ $(function () {
     //reverse_ip_result_ws
     //按ip重组
     function sort() {
-        $(".domain").css("display") === "table" ? ($(".domain").css("display", "none"), $(".sort-table").css("display", "table"), $(".filter").removeClass("complete")) : ($(".domain").css("display", "table"), $(".sort-table").css("display", "none"), $(".filter").addClass("complete"))
+        $(".domain").css("display") === "table" ? ($(".domain").css("display", "none"), $(".sort-table").css("display", "table"), $("#filter_text").attr("placeholder", "请输入符合IP规则的字符"), $("#filter_text").val(reg_sort)) : ($(".domain").css("display", "table"), $(".sort-table").css("display", "none"), $("#filter_text").attr("placeholder", "请输入域名允许的字符"), $("#filter_text").val(reg_domain))
     }
 
     //点击排序按钮
@@ -475,12 +483,100 @@ $(function () {
             }
             obj.children.push(ipObj)
         }
-        window.localStorage["chartObj"] = JSON.stringify(obj);
+        window.localStorage["chartObj"] = JSON.stringify(obj)
 
         var a = $('<a href="/chart" target="_blank"></a>');
-        a.appendTo(document.body);
+        a.appendTo('body');
         a[0].click();
     })
+
+    //domain status
+    $("#domain-status").on("click", function () {
+        isFilter ? filter(reg_domain, statusFilter) : filter("", statusFilter)
+        if (statusFilter === 3) {
+            statusFilter = 0
+        } else {
+            statusFilter++
+        }
+        trigger_status()
+    })
+
+    //filter rules
+    function filter(str, status) {
+        console.log(str)
+        var mark = 0;
+        var reg = new RegExp(str)
+        if ($(".domain").css("display") !== "none") {
+            var tr_domain = $(".domain tbody tr")
+
+            for (var i = 0; i < tr_domain.length; i++) {
+                if (reg.test($(tr_domain[i]).find("td").get(0).getAttribute("data-select"))) {
+                    // console.log(status === undefined)
+                    if (status !== undefined) {
+                        if (status === 3) {
+                            $(tr_domain[i]).css("display", "table-row")
+                            mark++
+                        } else {
+                            if (!$(tr_domain[i]).find(".server-status").hasClass(label_status[status])) {
+                                $(tr_domain[i]).css("display", "none")
+                            } else {
+                                $(tr_domain[i]).css("display", "table-row")
+                                mark++
+                            }
+                        }
+                    } else {
+                        $(tr_domain[i]).css("display", "table-row")
+                        mark++
+                    }
+                } else {
+                    $(tr_domain[i]).css("display", "none")
+                }
+            }
+        } else {
+            var tr_sort = $(".sort-table tbody tr")
+
+            for (var i = 0; i < tr_sort.length; i++) {
+                if (str === "") {
+                    $(tr_sort[i]).css("display", "table-row")
+                    mark++
+                } else {
+                    if (reg.test($(tr_sort[i]).attr("data-sort-ip"))) {
+                        $(tr_sort[i]).css("display", "table-row")
+                        mark++
+                    } else {
+                        $(tr_sort[i]).css("display", "none")
+                    }
+                }
+            }
+        }
+        if (mark === 0) {
+            $(".nofilter").css("display", "block")
+        } else {
+            $(".nofilter").css("display", "none")
+        }
+    }
+
+    //修改表头状态
+    function trigger_status() {
+        switch (statusFilter) {
+            case 0:
+                $(".status-info").html(" 全部")
+                $(".status-info").css("color", "white")
+                break;
+            case 1:
+                $(".status-info").html(" 正常")
+                $(".status-info").css("color", "#5cb85c")
+                break;
+            case 2:
+                $(".status-info").html(" 连接失败")
+                $(".status-info").css("color", "#f0ad4e")
+                break;
+            case 3:
+                $(".status-info").html(" 不存在")
+                $(".status-info").css("color", "#d9534f")
+                break;
+        }
+    }
 });
 
 

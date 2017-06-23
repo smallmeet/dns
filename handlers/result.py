@@ -23,7 +23,7 @@ from models import DBSession, Domain, SubDomainResult, TaskRecords
 from utils import utils
 from utils.config import config, db, redis_cursor
 from utils.history_ip import get_history_ip
-from service import PortScanEventService
+from service import PortScanEventService, ReverseIpService
 from utils.location_abbr import get_location_abbr
 from utils.reverse_ip_lookup import ReverseIpLookUp
 
@@ -600,17 +600,31 @@ class ResultWebSocketRealHandler(WebSocketHandler):
                 domain = self.domain_state_queue.get(timeout=0.1)
                 logging.info(domain)
                 if domain:
-                    self.domain_state_still_work = True
-                    api_url = 'http://' + config.domain_detect_api_host + '/detect_domain/' + domain
-                    resp = requests.get(api_url)
+                    db_session = DBSession()
+
+                    sub_domain_entity = db_session.query(SubDomainResult).filter(SubDomainResult.subdomain == domain).one()
+
                     response_json = {
                         'type': 'domain_state',
                         'domain': domain,
                         'success': 1
                     }
-                    response_json.update(resp.json())
+                    if sub_domain_entity.state:
+                        response_json['state'] = sub_domain_entity.state
+                    else:
+                        self.domain_state_still_work = True
+                        api_url = 'http://' + config.domain_detect_api_host + '/detect_domain/' + domain
+                        resp_json = requests.get(api_url).json()
+                        response_json.update(resp_json)
+
+                        db_session.query(SubDomainResult).filter(SubDomainResult.id == sub_domain_entity.id).update({
+                            'state': resp_json['state']
+                        })
+                        db_session.commit()
                     logging.info(response_json)
                     self.write_message(response_json)
+
+                    db_session.close()
             except Empty:
                 pass
             except Exception as e:
@@ -623,6 +637,10 @@ class IpReverseWebSocketHandler(WebSocketHandler):
 
     executor = ThreadPoolExecutor(max_workers=1000)
 
+    def __init__(self, application, request, **kwargs):
+        super(IpReverseWebSocketHandler, self).__init__(application, request, **kwargs)
+        self.reverse_ip_service = ReverseIpService()
+
     def check_origin(self, origin):
         return True
 
@@ -631,7 +649,7 @@ class IpReverseWebSocketHandler(WebSocketHandler):
         request_json = json.loads(message)
         if 'ip' in request_json:
             target_ip = request_json['ip']
-            self.write_message(ReverseIpLookUp(target_ip).run())
+            self.write_message(self.reverse_ip_service.reverse_ip(target_ip))
 
 
 class WhoisHandler(BaseHandler):

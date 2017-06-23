@@ -61,6 +61,7 @@ class SubDomainResult(BaseModel):
     location = Column(Text)
     last_commit_time = Column(DateTime, nullable=False)
     origin = Column(VARCHAR(32), nullable=False)
+    state = Column(INT, nullable=True)
 
 
 class TaskRecords(BaseModel):

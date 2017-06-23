@@ -19,9 +19,6 @@
         <span class="c_name">域名信息分析系统</span>
         <div class="header">
             <div class="header-inner" data-toggle="dropdown" class="dropdown-toggle">
-                <!--<div class="mini-avatar">-->
-                    <!--<img src="{{ static_url('img/{}.png'.format(avatar)) }}" alt="avatar">-->
-                <!--</div>-->
                 <span>{{username}}</span>
                 <b class="caret"></b>
                 <!--<button id="logout" class="btn btn-primary" type="button">登出</button>-->
@@ -38,7 +35,9 @@
             <img src="{{ static_url('img/logo.png') }}" alt="">
             <div class="form-group mg20 fix">
                 <div class="col-md-3 search-bar">
-                    <input id="input-content" class="form-control" type="text" placeholder="exampledomain.com" name="targetip" id="regularInput">
+                    <form id="form-content" name="content" onsubmit="return false;">
+                        <input id="input-content" class="form-control" type="text" placeholder="exampledomain.com" name="targetip">
+                    </form>
                 </div>
                 <button id="btn-query" type="submit" class="btn btn-default left">查询 <span class="glyphicon glyphicon-chevron-right"></span></button>
             </div>
@@ -85,7 +84,7 @@
     <script>
         $('body').keydown(function(e) {
           if (e.keyCode == 13) {
-            $('#btn-query').click()
+            $('#btn-query')[0].click()
           }
         });
 

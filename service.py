@@ -3,13 +3,17 @@
 """ create at 14/06/2017 """
 import logging
 import traceback
+from lxml import etree
+
+import requests
 
 from utils import utils
+from utils.reverse_ip_lookup import ReverseIpLookUp
 
 __author__ = 'binbin'
 
 import datetime
-from models import db_session, DBSession, Domain, TaskRecords, User
+from models import db_session, DBSession, Domain, TaskRecords, User, SubDomainResult
 from models import SystemDomains
 from models import SystemIps
 from models import SystemEvents
@@ -248,6 +252,38 @@ class TaskRecordService(object):
         return target_task_entity.state
 
 
+class ReverseIpService(object):
+
+    def reverse_ip(self, ip):
+        reverse_ip_data = ReverseIpLookUp(ip).run()
+
+        session = DBSession()
+        sub_domain_results = session.query(SubDomainResult).filter(SubDomainResult.ip.like('%{}%'.format(ip))).all()
+        session.close()
+
+        for i in sub_domain_results:
+            for j in reverse_ip_data[ip]:
+                if j['domain'] == i.subdomain:
+                    continue
+            try:
+                url = 'http://{}'.format(i.subdomain)
+                resp = requests.get(url)
+                resp.encoding = 'utf-8'
+                root = etree.HTML(resp.text)
+                titles = root.xpath('.//title/text()')
+                title = titles[0] if titles else ''
+                print(title)
+                reverse_ip_data[ip].append({
+                    'url': url,
+                    'domain': i.subdomain,
+                    'title': title
+                })
+            except Exception as e:
+                pass
+        # utils.remove_repeat_domain(reverse_ip_data[ip])
+        return reverse_ip_data
+
+
 if __name__ == "__main__":
     # PortScanEventService().create_event("47.93.87.52",'www.jinwulab.com')
     import json
@@ -262,4 +298,5 @@ if __name__ == "__main__":
     #     'is_brute': 0
     # })
 
-    print(TaskRecordService().get_task_state('asdasd.com'))
+    # print(TaskRecordService().get_task_state('asdasd.com'))
+    print(json.dumps(ReverseIpService().reverse_ip('221.228.213.94'), indent=2))

@@ -65,9 +65,13 @@ d3.textBlock = function () {
 
             var className = ""
             if(labelvar === "NS") {
-                className = "ns"
+                className = "domain"
             } else if(labelvar === "MX") {
-                className = "mx"
+                className = "ip"
+            } else if(labelvar === "site") {
+                className = "site"
+            } else {
+                className = "child"
             }
             element.append("rect")
                 .attr("x", -5) 

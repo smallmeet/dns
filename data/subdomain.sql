@@ -121,6 +121,9 @@ CREATE TABLE `system_subdomain_result` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+/* 新增子域名状态字段 */
+alter table `system_subdomain_result` add `state` varchar(10) default '';
+
 --
 -- Table structure for table `system_task_records`
 --

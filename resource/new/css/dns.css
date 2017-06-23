@@ -43,6 +43,10 @@ body {
   font-size: 1.1em;
 }
 
+.chart-body {
+  padding-top: 0;
+}
+
 .nounderline{text-decoration: none !important}
 
 h1 {
@@ -84,7 +88,7 @@ font-size: 1.4em;
 }
 
 #whois {
-  margin-bottom: 20px;
+  margin-bottom: 50px;
 }
 
 .more-wrapper {
@@ -357,9 +361,17 @@ button:focus {
 }
 
 .title {
-    color: #ddd; 
     font-family: 'Courier New', Courier, monospace; 
     text-align: left;
+    color: #3bb4ef;
+    font-weight: 700;
+    font-size: 20px;
+}
+
+.title span {
+  font-size: 0.7em;
+  font-weight: normal;
+  color: #777;
 }
 
 .table-his {
@@ -383,12 +395,20 @@ button:focus {
     stroke-width: 1px;
 }
 
-.node .ns {
+.node .domain {
     stroke: #0ec90e;
 }
 
-.node .mx {
+.node .ip {
     stroke: #F16304;
+}
+
+.node .site {
+  stroke: #f1e704;
+}
+
+.node .child {
+    stroke: #43e7ff;
 }
 
 i[data-parent] {
@@ -489,7 +509,7 @@ i[data-parent] {
 }
 .node text {
   fill: white;
-  font: 10px sans-serif;
+  font: 12px sans-serif;
 }
 .link {
   fill: none;
@@ -540,6 +560,41 @@ i[data-parent] {
 
 span.label i {
   vertical-align: middle;
+}
+
+.chart-title {
+  margin-bottom: 20px;
+  font-size: 30px;
+  text-align: center;
+}
+
+.nav-side {
+  position: fixed;
+  padding: 0;
+  top: 200px;
+  right: 0px;
+  width: 20px;
+  /*border-right: 1px solid white;*/
+  box-sizing: content-box;
+}
+
+.nav-side a {
+  padding: 0.3em 0.2em;
+  margin-bottom: 5px;
+  display: inline-block;
+  font-size: 75%;
+  font-weight: 700;
+  border-radius: .25em;
+  background-color: #777;
+}
+
+.nav-side a:last-child {
+  margin-bottom: 0;
+}
+
+.nav-side span {
+    display: inline-block;
+    width: 15px;
 }
 
 

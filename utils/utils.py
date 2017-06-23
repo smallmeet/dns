@@ -10,6 +10,7 @@ import socket
 import sys
 import types
 import uuid
+from urlparse import urlparse
 
 import requests
 
@@ -151,3 +152,22 @@ def img_create(filename):
     img.save(filename_url)
     return True
 
+
+def _get_netloc(url):
+    o = urlparse(url)
+    return o.netloc
+
+
+def remove_repeat_domain(data_list):
+    """去除重复结果"""
+    result_list = []
+    domain_set = set()
+    for elem in data_list:
+        url = elem['url']
+        domain = _get_netloc(url)
+        print(domain)
+        if domain not in domain_set:
+            domain_set.add(domain)
+            result_list.append(elem)
+
+    return result_list

@@ -187,7 +187,7 @@ $(function () {
                     if ($.inArray(ip_l[j], ipArr) === -1) {
                         ipArr.push(ip_l[j])
                         var sortTempRow = `
-                        <tr data-sort-ip=${subdomain[i].ip}>
+                        <tr data-sort-ip=${ip_l[j]}>
                             <td><i data-toggle='tooltip' title='端口扫描' data-parent="${subdomain[i].sub_domain}" data-ip="${ip_l[j]}" class='fa fa-eye'></i> <span data-search-ip="${ip_l[j]}">${ip_l[j]}</span> ${subdomain[i].location === "" ? `` : `<span class="flag flag-${subdomain[i].location.split(",")[j].toLocaleLowerCase()}"></span>`}<br></td>
                             <td>${subdomain[i].last_commit_time}</td>
                             <td data-select="${subdomain[i].sub_domain}" class="col-md-3"><span class="sort-domain">${subdomain[i].sub_domain}</span></td>
@@ -213,15 +213,15 @@ $(function () {
             case 1:
             case 2:
             case 3:
-                $("[data-domain='" + data.domain + "']").append(`<span class="label label-warning server-status" data-toggle="tooltip" title="无法访问"><i class="fa  fa-unlink"></i></span>`)
+                $("[data-domain='" + data.domain + "']").append(`<span class="label label-warning server-status" data-toggle="tooltip" title="无法访问"><i class="fa  fa-unlink"></i><span style="display:none;">无法访问</span></span>`)
 
                 break;
             case 0:
-                $("[data-domain='" + data.domain + "']").append(`<span class="label label-danger server-status" data-toggle="tooltip" title="不存在"><i class="fa  fa-ban"></i></span>`)
+                $("[data-domain='" + data.domain + "']").append(`<span class="label label-danger server-status" data-toggle="tooltip" title="不存在"><i class="fa  fa-ban"></i><span style="display:none;">不存在</span></span>`)
 
                 break;
             case 4:
-                $("[data-domain='" + data.domain + "']").append(`<span class="label label-success server-status" data-toggle="tooltip" title="正常"><i class="fa  fa-check"></i></span>`)
+                $("[data-domain='" + data.domain + "']").append(`<span class="label label-success server-status" data-toggle="tooltip" title="正常"><i class="fa  fa-check"></i><span style="display:none;">正常</span></span>`)
 
                 break;
         }
@@ -317,8 +317,9 @@ $(function () {
         `
         $(".port-info").append(portInfo_temp)
 
+        var port_info = JSON.parse(data.ip_info.ip.port_info)
         var moreInfo_temp = `
-            <pre>${data.ip_info.ip.port_info}</pre>
+            <pre style="text-align:left;">${port_info.dataset}</pre>
         `
         $(".more-info").append(moreInfo_temp)
         $("#port").modal("show")
@@ -394,7 +395,6 @@ $(function () {
     //筛选域名
     function domainSelect(str) {
         if ($(".domain").css("display") !== "none") {
-            console.log(1)
             statusFilter = 0
             trigger_status()
             str === "" ? isFilter = false : isFilter = true
@@ -404,10 +404,10 @@ $(function () {
                 return;
             }
         } else {
-            console.log(2)
-            var reg_format = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])(\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])){3}$/
+            var reg_format = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])(\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])){0,3}$/
+            console.log(reg_format.test(str))
             if (str !== "" && !reg_format.test(str)) {
-                myalert("请输入合法的域名", "tipwrong")
+                myalert("必须以数字开头结尾，只包含数字和点", "tipwrong")
                 return;
             }
         }
@@ -421,7 +421,7 @@ $(function () {
         } else {
             reg_sort = $("#filter_text").val()
         }
-        
+
         domainSelect($("#filter_text").val())
     })
 
@@ -433,7 +433,7 @@ $(function () {
     //reverse_ip_result_ws
     //按ip重组
     function sort() {
-        $(".domain").css("display") === "table" ? ($(".domain").css("display", "none"), $(".sort-table").css("display", "table"), $("#filter_text").attr("placeholder", "请输入要查询的IP"), $("#filter_text").val(reg_sort)) : ($(".domain").css("display", "table"), $(".sort-table").css("display", "none"), $("#filter_text").attr("placeholder", "请输入域名允许的字符"), $("#filter_text").val(reg_domain))
+        $(".domain").css("display") === "table" ? ($(".domain").css("display", "none"), $(".sort-table").css("display", "table"), $("#filter_text").attr("placeholder", "请输入符合IP规则的字符"), $("#filter_text").val(reg_sort)) : ($(".domain").css("display", "table"), $(".sort-table").css("display", "none"), $("#filter_text").attr("placeholder", "请输入域名允许的字符"), $("#filter_text").val(reg_domain))
     }
 
     //点击排序按钮
@@ -569,6 +569,14 @@ $(function () {
                 break;
         }
     }
+
+    $(document).on('click', '.cursor', function (event) {
+        event.preventDefault();
+
+        $('html, body').animate({
+            scrollTop: $($.attr(this, 'href')).offset().top - 70
+        }, 1000);
+    });
 });
 
 
