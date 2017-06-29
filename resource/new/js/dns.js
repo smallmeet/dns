@@ -1,7 +1,7 @@
 $(function () {
     // console.log(config)
     var domainData = {}
-    var statusFilter = 0;//当前用户选择状态
+    // var statusFilter = 0;//当前用户选择状态
     var isFilter = false;//当前数据是否过滤
     var reg_domain = ""//domain table过滤正则str
     var reg_sort = ""//sort table过滤正则str
@@ -46,17 +46,7 @@ $(function () {
         $('html, body').animate({ scrollTop: 0 }, 300);
     });
 
-    $("#download").click(function () {
-        var date = new Date()
-        $(".table2excel").table2excel({
-            exclude: ".noExl",
-            name: "Excel Document Name",
-            filename: "domains_" + date.getFullYear() + "-" + (date.getMouth + 1) + "-" + date.getDate(),
-            exclude_img: true,
-            exclude_links: true,
-            exclude_inputs: true
-        });
-    });
+    $(".table-export").tableExport({ formats: ["xlsx", "csv"] });
 
     //webscoket
     // 192.168.1.172:8888/result_ws
@@ -155,11 +145,6 @@ $(function () {
         var subdomain = data.sub_domains
         var refreshData = {}
         var ipArr = []
-        // if (!subdomain.length) {
-        //     $(".table2excel").css("display", "none")
-        //     $(".input-group").css("display", "none")
-        //     $(".nofilter").css("display", "block")
-        // }
         for (var i = 0; i < subdomain.length; i++) {
             // normal table
             var isShow = true
@@ -307,7 +292,7 @@ $(function () {
         $(".more-info").empty()
 
         var portInfo_temp = `
-            <p>IP地址: ${data.ip_info.ip.ip} <a href="${data.ip_info.ip.ip}"><i class="fa fa-external-link" style="color:lightblue;"></i></a></p>
+            <p>IP地址: ${data.ip_info.ip.ip}</p>
                     <p>协议: ${data.domain_info.cms ? data.domain_info.cms.cms : ``}</p>
                     <p>CMS信息: ${data.ip_info.web_info ? data.ip_info.ip.web_info.product : ``}</p>
                     <p>产品: ${data.ip_info.web_info ? data.ip_info.ip.web_info.name : ``}</p>
@@ -395,8 +380,9 @@ $(function () {
     //筛选域名
     function domainSelect(str) {
         if ($(".domain").css("display") !== "none") {
-            statusFilter = 0
-            trigger_status()
+            // statusFilter = 0
+            // trigger_status()
+            $(".status-title").html("全部")
             str === "" ? isFilter = false : isFilter = true
             var reg_format = /[\s_\u4E00-\u9FA5\uF900-\uFA2D]/
             if (reg_format.test(str)) {
@@ -483,14 +469,16 @@ $(function () {
     })
 
     //domain status
-    $("#domain-status").on("click", function () {
-        isFilter ? filter(reg_domain, statusFilter) : filter("", statusFilter)
-        if (statusFilter === 3) {
-            statusFilter = 0
-        } else {
-            statusFilter++
-        }
-        trigger_status()
+    $(".domain-status").on("click", function () {
+        console.log($(this).index())
+        $(".status-title").html($(this).find("span").html())
+        isFilter ? filter(reg_domain, $(this).index()) : filter("", $(this).index())
+        // if (statusFilter === 3) {
+        //     statusFilter = 0
+        // } else {
+        //     statusFilter++
+        // }
+        // trigger_status()
     })
 
     //filter rules 
@@ -505,11 +493,11 @@ $(function () {
                 if (reg.test($(tr_domain[i]).find("td").get(0).getAttribute("data-select"))) {
                     // console.log(status === undefined)
                     if (status !== undefined) {
-                        if (status === 3) {
+                        if (status === 0) {
                             $(tr_domain[i]).css("display", "table-row")
                             mark++
                         } else {
-                            if (!$(tr_domain[i]).find(".server-status").hasClass(label_status[status])) {
+                            if (!$(tr_domain[i]).find(".server-status").hasClass(label_status[status - 1])) {
                                 $(tr_domain[i]).css("display", "none")
                             } else {
                                 $(tr_domain[i]).css("display", "table-row")
@@ -575,7 +563,7 @@ $(function () {
 
         $('html, body').animate({
             scrollTop: $($.attr(this, 'href')).offset().top - 70
-        }, 1000);
+        }, 500);
     });
 });
 

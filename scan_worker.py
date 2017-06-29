@@ -5,6 +5,7 @@
 __author__ = 'binbin'
 
 import gevent
+import logging
 from utils.banner import get_banner
 from utils.scan_port import ScanPort
 from utils.whatweb import WhatWeb
@@ -18,14 +19,30 @@ from tornado import ioloop
 from gevent import monkey
 monkey.patch_all()
 import time
+from sqlalchemy import create_engine
+from sqlalchemy.orm import scoped_session, sessionmaker
 
-TIME_OUT = 120
+from utils.config import config_json
+
+logging.basicConfig(level=logging.DEBUG,
+                format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
+                datefmt='%a, %d %b %Y %H:%M:%S')
+
+engine = create_engine('mysql://{}:{}@{}/{}?charset={}'.format(
+    config_json['mysql_user'],
+    config_json['mysql_pwd'],
+    config_json['mysql_host'],
+    config_json['mysql_db'],
+    config_json['mysql_charset']
+))
+db_session = scoped_session(sessionmaker(bind=engine))
+TIME_OUT = 300
+
+port_scan_event_service = PortScanEventService(db_session)
+
 
 class GeventTimeOutException(Exception):
     pass
-
-port_scan_event_service = PortScanEventService()
-
 
 
 def _get_banner(ip):
@@ -34,14 +51,15 @@ def _get_banner(ip):
     :param ip:
     :return:
     '''
-    print "获取80端口的web信息"
+    logging.info("获取80端口的web信息")
     try:
         with Timeout(TIME_OUT, GeventTimeOutException):
             gevent.sleep(0)
             res = get_banner(ip)
             port_scan_event_service.sync_ip_web_info(ip,json.dumps(res))
     except GeventTimeOutException as e:
-        print "_get_banner超时"
+        logging.info("_get_banner超时")
+
 
 def _scan_port(ip):
     '''
@@ -49,14 +67,15 @@ def _scan_port(ip):
     :param ip:
     :return:
     '''
-    print "获取其它端口信息"
+    logging.info("获取其它端口信息")
     try:
         with Timeout(TIME_OUT, GeventTimeOutException):
             gevent.sleep(0)
             res = ScanPort().scan(ip)
             port_scan_event_service.sync_ip_port_info(ip,json.dumps(res))
     except GeventTimeOutException as e:
-        print "_scan_port超时"
+        logging.info("_scan_port超时")
+
 
 def _cms(domain):
     '''
@@ -64,22 +83,21 @@ def _cms(domain):
     :param domain:
     :return:
     '''
-    print "获取cms信息"
+    logging.info("获取cms信息")
     try:
         with Timeout(TIME_OUT, GeventTimeOutException):
             gevent.sleep(0)
             res = WhatWeb().discriminate(domain)
             port_scan_event_service.sync_cms_info(domain,json.dumps(res))
     except GeventTimeOutException as e:
-        print "_cms超时"
-
-
+        logging.info("_cms超时")
 
 
 class ScanWorkerClient(TornadoWebSocketClient):
      def opened(self):
          while True:
              res = port_scan_event_service.fetch_wait_events()
+             logging.info(res)
              for e in res:
                  ip = e.get_ip()
                  domain = e.domain
@@ -92,13 +110,13 @@ class ScanWorkerClient(TornadoWebSocketClient):
                  port_scan_event_service.finish_event(e.id,2)
                  self.send(json.dumps({'type':'scan_finish_notify','eventid':e.id}))
 
-             time.sleep(5)
+             time.sleep(0.25)
          # self.send(json.dumps({'type':'notify_event_finish','eventid':4}))
                  # 推送
          pass
 
      def received_message(self, m):
-         print m
+         logging.info(m)
          # if len(m) == 175:
          #     self.close(reason='Bye bye')
 
@@ -113,6 +131,6 @@ if __name__ == "__main__":
     ws.connect()
     ioloop.IOLoop.instance().start()
 
-    print PortScanEventService().get_info_recently("127.0.0.1",'shaobenbin.com')
+    logging.info(PortScanEventService().get_info_recently("127.0.0.1",'shaobenbin.com'))
 
 

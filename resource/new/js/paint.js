@@ -34,6 +34,8 @@ d3.textBlock = function () {
             var element = d3.select(this);
 
             var strs = labelvar.split(" ")
+            var el = []
+            strs.length > 1 ? el.push(strs[0], strs.slice(1)) : el = strs
             // first append text to svg:g
             
             var t = element.append("text")
@@ -42,7 +44,7 @@ d3.textBlock = function () {
                 // .attr("y", "-1em")
 
             
-            if(strs.length === 1) {
+            if(el.length === 1) {
                 t.text(labelvar)
                 .attr("y", "0")
                 .attr("fill", "white")
@@ -50,7 +52,7 @@ d3.textBlock = function () {
             } else {
                 t.attr("y", "-1em")
                 t.selectAll("tspan")
-                    .data(strs)
+                    .data(el)
                     .enter()
                     .append("tspan")
                     .attr("x", "0")
@@ -89,7 +91,7 @@ d3.textBlock = function () {
                 .attr("x", 0)
                 // .attr("y", "-1em")
 
-            if(strs.length === 1) {
+            if(el.length === 1) {
                 t2.text(labelvar)
                     .attr("y", "0")
                     .attr("fill", "white")
@@ -97,7 +99,7 @@ d3.textBlock = function () {
             } else {
                 t2.attr("y", "-1em")
                 t2.selectAll("tspan")
-                    .data(strs)
+                    .data(el)
                     .enter()
                     .append("tspan")
                     .attr("x", "0")

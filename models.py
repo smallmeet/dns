@@ -11,15 +11,6 @@ import ipaddress
 
 from utils.config import config_json
 
-engine = create_engine('mysql://{}:{}@{}/{}?charset={}'.format(
-    config_json['mysql_user'],
-    config_json['mysql_pwd'],
-    config_json['mysql_host'],
-    config_json['mysql_db'],
-    config_json['mysql_charset']
-))
-DBSession = sessionmaker(bind=engine)
-db_session = DBSession()
 BaseModel = declarative_base()
 
 
@@ -158,6 +149,14 @@ class SystemIps(BaseModel):
         return int(ipaddress.IPv4Address(unicode(ip)))
 
 if __name__ == '__main__':
+    engine = create_engine('mysql://{}:{}@{}/{}?charset={}'.format(
+        config_json['mysql_user'],
+        config_json['mysql_pwd'],
+        config_json['mysql_host'],
+        config_json['mysql_db'],
+        config_json['mysql_charset']
+    ))
+    DBSession = sessionmaker(bind=engine)
     db_session = DBSession()
     domain = db_session.query(Domain).filter(Domain.domain == 'kq88.com').one()
     print(domain.mx_records)

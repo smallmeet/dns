@@ -11,16 +11,20 @@ import threading
 import traceback
 from Queue import Queue, Empty
 
+import datetime
 import requests
 import time
 import tornado.web
+from sqlalchemy.orm import scoped_session
+from sqlalchemy.orm.exc import NoResultFound
+from tornado import gen, ioloop
 from tornado.websocket import WebSocketHandler
 from concurrent.futures import ThreadPoolExecutor
 from tornado.concurrent import run_on_executor
 
-from handlers.base import BaseHandler
-from models import DBSession, Domain, SubDomainResult, TaskRecords
-from utils import utils
+from handlers.base import BaseHandler, BaseWebSocketHandler
+from models import Domain, SubDomainResult, TaskRecords
+from utils import misc
 from utils.config import config, db, redis_cursor
 from utils.history_ip import get_history_ip
 from service import PortScanEventService, ReverseIpService
@@ -28,7 +32,7 @@ from utils.location_abbr import get_location_abbr
 from utils.reverse_ip_lookup import ReverseIpLookUp
 
 sys.path.append('../')
-from utils.utils import parse_domain_simple, is_valid_domain, str2bool
+from utils.misc import parse_domain_simple, is_valid_domain, str2bool
 
 pre_system = config.pre_system
 mysql_cursor = db
@@ -111,8 +115,8 @@ def add_new_task_state(target, task_id):
                     (%s, %s, %s, %s, %s)''',
                   task_id,
                   target,
-                  utils.now(),
-                  utils.original_time(),
+                  misc.now(),
+                  misc.original_time(),
                   '0')
     except Exception as e:
         logging.error('添加任务状态失败')
@@ -288,7 +292,7 @@ class ResultAsyncHandler(BaseHandler):
         self.write(json.dumps(result_dict))
 
 
-class ResultWebSocketHandler(WebSocketHandler):
+class ResultWebSocketHandler(BaseWebSocketHandler):
     """获取结果的接口"""
 
     executor = ThreadPoolExecutor(max_workers=1000)
@@ -322,7 +326,7 @@ class ResultWebSocketHandler(WebSocketHandler):
             self.example_get_scan_info()
 
     def emit_scan_info(self,eventid):
-        res = PortScanEventService().get_info_by_id(eventid)
+        res = PortScanEventService(self.db).get_info_by_id(eventid)
         if not res:
             return
 
@@ -390,7 +394,7 @@ class ResultWebSocketHandler(WebSocketHandler):
             self.write_message(result_json)
 
 
-class ResultWebSocketRealHandler(WebSocketHandler):
+class ResultWebSocketRealHandler(BaseWebSocketHandler):
     """获取结果的接口"""
 
     executor = ThreadPoolExecutor(max_workers=1000)
@@ -439,7 +443,7 @@ class ResultWebSocketRealHandler(WebSocketHandler):
 
                 print("这是一个端口扫描完毕的通知请求")
                 eventid = request_json['eventid']
-                res = PortScanEventService().get_info_by_id(eventid)
+                res = PortScanEventService(self.db).get_info_by_id(eventid)
                 self.emit_scan_info(res)
             return
 
@@ -461,13 +465,15 @@ class ResultWebSocketRealHandler(WebSocketHandler):
 
     def on_close(self):
         self.closed = True
+        self.domain_state_should_stop = True
         logging.info('on close')
         self.connections.remove(self)
+        self.db.close()
 
     def create_scan_event(self,request_json):
         ip = request_json['ip']
         domain = request_json['domain']
-        port_scan_event_service = PortScanEventService()
+        port_scan_event_service = PortScanEventService(self.db)
         res = port_scan_event_service.get_info_recently(ip,domain)
         if res:
             self.emit_scan_info(res)
@@ -479,7 +485,6 @@ class ResultWebSocketRealHandler(WebSocketHandler):
             return
         res['type'] = 'scan_info'
         [con.write_message(res) for con in self.connections]
-
 
     def get_domain_detail(self, target_domain):
         """获取域名详情,NS 和 MX 记录."""
@@ -493,17 +498,18 @@ class ResultWebSocketRealHandler(WebSocketHandler):
             logging.warning(ips)
             response_json['other_site'] = [ReverseIpLookUp(i).run() for i in ips]
             while True:
-                db_session = DBSession()
-                target_domain_entity = db_session.query(Domain).filter(Domain.domain == target_domain).one()
-                db_session.close()
-                if not response_json.get('ns_records') and target_domain_entity.ns_records:
-                    response_json['ns_records'] = json.loads(target_domain_entity.ns_records)
-                if not response_json.get('mx_records') and target_domain_entity.mx_records:
-                    response_json['mx_records'] = json.loads(target_domain_entity.mx_records)
-                if not response_json.get('whois') and target_domain_entity.domain_whois:
-                    response_json['whois'] = json.loads(target_domain_entity.domain_whois)
-                if 'ns_records' in response_json and 'mx_records' in response_json and 'whois' in response_json:
-                    break
+                # db_session = DBSession()
+                target_domain_entity = self.db.query(Domain).filter(Domain.domain == target_domain).first()
+                self.db.close()
+                if target_domain_entity is not None:
+                    if not response_json.get('ns_records') and target_domain_entity.ns_records:
+                        response_json['ns_records'] = json.loads(target_domain_entity.ns_records)
+                    if not response_json.get('mx_records') and target_domain_entity.mx_records:
+                        response_json['mx_records'] = json.loads(target_domain_entity.mx_records)
+                    if not response_json.get('whois') and target_domain_entity.domain_whois:
+                        response_json['whois'] = json.loads(target_domain_entity.domain_whois)
+                    if 'ns_records' in response_json and 'mx_records' in response_json and 'whois' in response_json:
+                        break
                 time.sleep(1)
             logging.info(response_json)
             self.write_message(response_json)
@@ -520,24 +526,26 @@ class ResultWebSocketRealHandler(WebSocketHandler):
             'history': get_history_ip(target_domain)['data']
         })
 
+    @gen.coroutine
     def get_sub_domains(self, target_domain):
         """获取子域名."""
-        db_session = None
+        # db_session = None
         try:
-            db_session = DBSession()
-            target_domain_entity = db_session.query(Domain).filter(Domain.domain == target_domain).one()
-            db_session.close()
+            # db_session = DBSession()
+            target_domain_entity = self.db.query(Domain).filter(Domain.domain == target_domain).one()
 
             target_domain_id = target_domain_entity.id
             offset = 0
             limit = 30
+            max_count = 500
             is_finished = False
-            while not is_finished and not self.closed:
-                db_session = DBSession()
-                task_record_entity = db_session.query(TaskRecords).filter(TaskRecords.keywords == target_domain).one()
+            while not is_finished and not self.closed and offset < max_count:
+                # db_session = DBSession()
+                task_record_entity = self.db.query(TaskRecords).filter(TaskRecords.keywords == target_domain).one()
                 task_state = task_record_entity.state
 
-                target_sub_domains = db_session.query(SubDomainResult).filter(SubDomainResult.domain_id == target_domain_id).offset(offset).limit(limit).all()
+                target_sub_domains = self.db.query(SubDomainResult).filter(SubDomainResult.domain_id == target_domain_id).offset(offset).limit(limit).all()
+                self.db.close()
                 logging.info('domain_id: {}, offset: {}, limit: {}, type: {}'.format(target_domain_id, offset, limit, target_sub_domains))
                 # return
                 response_json = {
@@ -568,15 +576,17 @@ class ResultWebSocketRealHandler(WebSocketHandler):
                         self.get_domain_state(response_json)
                 offset += real_query_count
 
-                db_session.close()
-                time.sleep(0.5)
+                yield gen.Task(
+                    ioloop.IOLoop.current().add_timeout,
+                    deadline=datetime.timedelta(seconds=0.5))
         except Exception as e:
             logging.error(traceback.format_exc())
             logging.error(e)
-            return None
+            yield None
         finally:
-            if db_session is not None:
-                db_session.close()
+            # if db_session is not None:
+            #     db_session.close()
+            pass
 
     def get_domain_state(self, response_json):
         """将域名提交到自身的队列, 准备探测状态."""
@@ -595,36 +605,34 @@ class ResultWebSocketRealHandler(WebSocketHandler):
 
     def get_domain_state_looper(self):
         """异步线程, 用于探测域名状态."""
+        session = self.db
         while not self.domain_state_should_stop:
             try:
                 domain = self.domain_state_queue.get(timeout=0.1)
                 logging.info(domain)
                 if domain:
-                    db_session = DBSession()
-
-                    sub_domain_entity = db_session.query(SubDomainResult).filter(SubDomainResult.subdomain == domain).one()
+                    sub_domain_entity = session.query(SubDomainResult).filter(SubDomainResult.subdomain == domain).first()
 
                     response_json = {
                         'type': 'domain_state',
                         'domain': domain,
                         'success': 1
                     }
-                    if sub_domain_entity.state:
-                        response_json['state'] = sub_domain_entity.state
-                    else:
-                        self.domain_state_still_work = True
-                        api_url = 'http://' + config.domain_detect_api_host + '/detect_domain/' + domain
-                        resp_json = requests.get(api_url).json()
-                        response_json.update(resp_json)
-
-                        db_session.query(SubDomainResult).filter(SubDomainResult.id == sub_domain_entity.id).update({
-                            'state': resp_json['state']
-                        })
-                        db_session.commit()
-                    logging.info(response_json)
-                    self.write_message(response_json)
-
-                    db_session.close()
+                    if sub_domain_entity:
+                        if sub_domain_entity.state:
+                            response_json['state'] = int(sub_domain_entity.state)
+                        else:
+                            self.domain_state_still_work = True
+                            api_url = 'http://' + config.domain_detect_api_host + '/detect_domain/' + domain
+                            resp_json = requests.get(api_url).json()
+                            response_json.update(resp_json)
+                            session.query(SubDomainResult).filter(SubDomainResult.id == sub_domain_entity.id).update({
+                                'state': resp_json['state']
+                            })
+                            session.commit()
+                        logging.info(response_json)
+                        self.write_message(response_json)
+                    session.commit()
             except Empty:
                 pass
             except Exception as e:
@@ -633,13 +641,13 @@ class ResultWebSocketRealHandler(WebSocketHandler):
             self.domain_state_still_work = False
 
 
-class IpReverseWebSocketHandler(WebSocketHandler):
+class IpReverseWebSocketHandler(BaseWebSocketHandler):
 
     executor = ThreadPoolExecutor(max_workers=1000)
 
     def __init__(self, application, request, **kwargs):
         super(IpReverseWebSocketHandler, self).__init__(application, request, **kwargs)
-        self.reverse_ip_service = ReverseIpService()
+        self.reverse_ip_service = ReverseIpService(self.db)
 
     def check_origin(self, origin):
         return True
@@ -660,8 +668,8 @@ class WhoisHandler(BaseHandler):
 
         result_json = {'success': 0}
         if target_domain:
-            target_domain = utils.parse_domain_simple(target_domain)
-            if utils.is_valid_domain(target_domain):
+            target_domain = misc.parse_domain_simple(target_domain)
+            if misc.is_valid_domain(target_domain):
                 sql = '''
                     SELECT
                         `domain_whois`
@@ -695,8 +703,8 @@ class AddBruteTaskHandler(tornado.web.RequestHandler):
 
         result_json = {'success': 0}
         if target_domain:
-            target_domain = utils.parse_domain_simple(target_domain)
-            if utils.is_valid_domain(target_domain):
+            target_domain = misc.parse_domain_simple(target_domain)
+            if misc.is_valid_domain(target_domain):
                 task_state = get_task_state(target_domain)
                 logging.debug('任务状态: {0}'.format(task_state))
                 if task_state == 2:

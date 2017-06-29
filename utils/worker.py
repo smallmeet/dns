@@ -11,9 +11,11 @@ import os
 import threading
 import time
 import logging
-import utils
 import traceback
+
 from taskloader import load_task
+
+import misc
 from config import config, redis_cursor, db
 
 reload(sys)
@@ -46,6 +48,18 @@ def update_task_state(task_id, target_state):
               task_id)
 
 
+def time_it(func):
+    """测量方法运行时间"""
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        func(*args, **kwargs)
+        end = time.time()
+        logging.info('function `{}` used {} seconds'.format(func.func_name, end - start))
+
+    return wrapper
+
+
+@time_it
 def execute_task(task_id):
     """执行任务"""
     # 取任务信息
@@ -66,7 +80,7 @@ def execute_task(task_id):
     task_runner_thread.setDaemon(True)
     task_runner_thread.start()
 
-    while not utils.is_threads_done(tasks):
+    while not misc.is_threads_done(tasks):
         logging.debug('111')
         time.sleep(0.1)
 
@@ -78,7 +92,7 @@ def execute_task(task_id):
             `state` = %s
         WHERE
             `id` = %s''',
-              utils.now(),
+              misc.now(),
               2,
               task_id)
 
@@ -110,7 +124,7 @@ def run():
     config.debug and logging.info('开始轮循任务区.')
     for per_task_id in executing_task_ids:
         task_runner_pid = int(redis_cursor.hget(running_tasks_key, per_task_id))
-        if not utils.is_running(task_runner_pid):
+        if not misc.is_running(task_runner_pid):
             # 如果任务对应的进程挂了, 则接管任务
             config.debug and logging.info('任务 %s 对应进程挂了, 接管该任务.' % per_task_id)
             take_over_task(per_task_id)

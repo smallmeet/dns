@@ -12,7 +12,7 @@ from tornado.concurrent import run_on_executor
 from tornado.httpclient import AsyncHTTPClient, HTTPRequest
 
 from base import BaseHandler
-from utils import utils
+from utils import misc
 from utils.banner import get_banner
 from utils.config import config
 from utils.whatweb import WhatWeb
@@ -31,8 +31,8 @@ class GetHttpHeaderHandler(BaseHandler):
 
         result_dict = {'success': 0}
         if target_domain:
-            target_domain = utils.parse_domain_simple(target_domain)
-            if utils.is_valid_domain(target_domain):
+            target_domain = misc.parse_domain_simple(target_domain)
+            if misc.is_valid_domain(target_domain):
                 result_dict['success'] = 1
                 result_dict['domain'] = target_domain
                 result_dict['http_header'] = GetBanner(target_domain).execute()
@@ -51,7 +51,7 @@ class PortBannerHandler(BaseHandler):
 
         target_ip = self.get_argument('ip', None)
 
-        if target_ip and utils.is_valid_ip(target_ip):
+        if target_ip and misc.is_valid_ip(target_ip):
             banner_info = get_banner(target_ip)
             if banner_info is not None:
                 result_json['success'] = 1
@@ -67,19 +67,19 @@ class PortBannerHandler(BaseHandler):
 
         self.finish(json.dumps(result_json))
 
-class PortScanEventHandler():
+
+class PortScanEventHandler(BaseHandler):
     @tornado.web.authenticated
     def post(self):
-        '''
+        """
         创建一个扫描时间
         :return:
-        '''
-
+        """
         # check ip && domain是否已经查询过了,如果是就不再查询了,且直接将结果推送到前段
         ip = self.get_argument('ip')
         domain = self.get_argument('domain')
 
-        port_scan_service = PortScanEventService()
+        port_scan_service = PortScanEventService(self.db)
 
         res = port_scan_service.get_info_recently(ip,domain)
         if res:

@@ -4,7 +4,7 @@ import logging
 import traceback
 
 from service import UserService
-from utils.utils import next_uuid, img_create
+from utils.misc import next_uuid, img_create
 import tornado.web
 import json
 import sys
@@ -14,7 +14,7 @@ from handlers.base import BaseHandler
 
 sys.path.append('../')
 from utils.config import config, db, redis_cursor
-from utils.utils import parse_domain_simple, is_valid_domain, now, get_ip_list, str2bool
+from utils.misc import parse_domain_simple, is_valid_domain, now, get_ip_list, str2bool
 
 pre_system = config.pre_system
 mysql_cursor = db
@@ -40,24 +40,24 @@ class SearchHandler(BaseHandler):
             return
 
         if cookie_username:
-            sql = 'select avatar from system_admin_user WHERE username=%s'
-            ret = db.query(sql, cookie_username)[0]['avatar']
-            if ret != '':
-                filename = ret
-            else:
-                filename = next_uuid()
-            filename_url = 'static/img/avatar/{0}.png'.format(filename)
-            if not os.path.exists(filename_url):
-                if img_create(filename):
-                    sql = '''
-                            UPDATE `subdomain`.`system_admin_user` SET `avatar`=%s WHERE username=%s;
-
-                            '''
-                    ret = db.execute(sql, filename, cookie_username)
-                    if ret:
-                        pass
-                else:
-                    filename = 'icon'
+            # sql = 'select avatar from system_admin_user WHERE username=%s'
+            # ret = db.query(sql, cookie_username)[0]['avatar']
+            # if ret != '':
+            #     filename = ret
+            # else:
+            #     filename = next_uuid()
+            # filename_url = 'static/img/avatar/{0}.png'.format(filename)
+            # if not os.path.exists(filename_url):
+            #     if img_create(filename):
+            #         sql = '''
+            #                 UPDATE `subdomain`.`system_admin_user` SET `avatar`=%s WHERE username=%s;
+            #
+            #                 '''
+            #         ret = db.execute(sql, filename, cookie_username)
+            #         if ret:
+            #             pass
+            #     else:
+            #         filename = 'icon'
             # TODO: 重新建一张历史表
             # sql = '''select domain from system_task_records
             #          where user_id=
@@ -114,7 +114,7 @@ class SearchHandler(BaseHandler):
             #             history.append(names['x%s' % i])
             #     except:
             #         pass
-            self.render('home.html', history=history, avatar=filename, username=cookie_username)
+            self.render('home.html', history=history, username=cookie_username)
             # self.render('login.html')
 
         else:
@@ -128,7 +128,7 @@ class SearchNewHandler(BaseHandler):
 
     def __init__(self, application, request, **kwargs):
         super(SearchNewHandler, self).__init__(application, request, **kwargs)
-        self.user_service = UserService()
+        self.user_service = UserService(self.db)
 
     @tornado.web.authenticated
     def get(self, *args, **kwargs):

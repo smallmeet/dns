@@ -9,23 +9,27 @@ import importlib
 import threading
 import time
 import logging
+
 import traceback
 
 import requests
 
 from g import g_lock
 from config import db, redis_cursor, config
-from utils import get_ip, now, is_threads_done, dumps_handler, get_ip_api
+from misc import get_ip, now, is_threads_done, dumps_handler, get_ip_api
 import iplookup
 
-from config import config
+from config import config, db_session
 from reverse_ip_lookup import ReverseIpLookUp
+from whatweb import WhatWeb
 
-sys.path.append('.')
-sys.path.append('..')
+sys.path.append('./')
+sys.path.append('../')
+from service import PortScanEventService
 
 project_name = config.project_name
 reverse_ip_key_prefix = project_name + '__result_'
+port_scan_event_service = PortScanEventService(db_session)
 
 
 def lazy_load(module_name, prefix_package=None):
@@ -59,6 +63,7 @@ def domain_and_ip(domain_list):
 
 
 def set_origin(result, func):
+    """设置域名来源"""
     class_name = func.im_class.__name__
 
     if class_name == 'Baidu' \
@@ -89,6 +94,7 @@ def set_origin(result, func):
 
 
 def get_locations(result):
+    """获取位置"""
     for per_domain in result['data']:
         per_domain_data = result['data'][per_domain]
 
@@ -124,12 +130,14 @@ class SearchTask(object):
     @staticmethod
     def task_runner(func, callback):
         """运行任务
+        :return
         {
             "origin": 来源,
             "data": {
                 "DOMAIN": {
                     'ip': [ IPS ],
-                    'location': [ LOCATIONS ]
+                    'location': [ LOCATIONS ],
+                    /* 'cms': "  ", */
                 }
                 ...
             }
@@ -140,6 +148,13 @@ class SearchTask(object):
             result = domain_and_ip(result)
             result = set_origin(result, func)
             result = get_locations(result)
+
+            # # 扫描 cms
+            # for domain in result['data']:
+            #     domain_json = result['data'][domain]
+            #     print(domain)
+            #     domain_json['cms'] = WhatWeb().discriminate(domain)
+
             callback(func, result)
         except Exception as e:
             logging.error('Caught an error in %' + threading.current_thread().getName())
@@ -177,6 +192,8 @@ class SearchTask(object):
                           result['origin'],
                           per_domain_data['location'],
                           self.target)
+                # 存入 cms 信息
+                # port_scan_event_service.sync_cms_info(per_domain, json.dumps(per_domain_data['cms']))
             logging.info('saving over.')
         except Exception as e:
             logging.error(traceback.format_exc())

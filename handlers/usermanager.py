@@ -10,7 +10,7 @@ import tornado.web
 import sys
 from handlers.base import BaseHandler
 from utils.config import config, db
-from utils.utils import original_time, next_uuid, img_create, now
+from utils.misc import original_time, next_uuid, img_create, now
 
 sys.path.append('../')
 

@@ -9,6 +9,9 @@ import torndb
 import redis
 import os
 
+from sqlalchemy import create_engine
+from sqlalchemy.orm import scoped_session, sessionmaker
+
 
 class Namespace(object):
     """Simple object for storing attributes.
@@ -70,6 +73,16 @@ try:
     pre_system = config_json['pre_system']
     http_server_port = config_json['http_port']
     DEBUG = config_json['debug']
+
+    # 为 Worker 和 TaskLoader 创建
+    engine = create_engine('mysql://{}:{}@{}/{}?charset={}'.format(
+        config_json['mysql_user'],
+        config_json['mysql_pwd'],
+        config_json['mysql_host'],
+        config_json['mysql_db'],
+        config_json['mysql_charset']
+    ))
+    db_session = scoped_session(sessionmaker(bind=engine))
 except Exception as e:
     logging.error('load config error: %s' % str(e))
     sys.exit(-1)

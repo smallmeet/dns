@@ -119,8 +119,17 @@ border-color: #777;
   cursor: pointer;
 }
 
-#domain-status {
+.status-menu {
+  min-width: 100px;
+}
+
+.domain-status {
   cursor: pointer;
+}
+
+.domain-status a {
+  font-size: 12px;
+  padding: 1px 8px !important;
 }
 
 tr {
@@ -595,6 +604,29 @@ span.label i {
 .nav-side span {
     display: inline-block;
     width: 15px;
+}
+
+button[data-key] {
+  position: relative;
+  padding-left: 59px;
+}
+
+button[data-key]:before {
+  position: absolute;
+  top: -5px;
+  left: 10px;
+  box-shadow: 1px 1px 2px rgba(0,0,0,.2);
+}
+
+button[data-key="xlsx"]:before {
+  padding: 10px;
+  background-color: #006400;
+  content: url(../img/ixlsx.png);
+}
+button[data-key="csv"]:before {
+  padding: 10px 13px;
+  background-color: #00f;
+  content: url(../img/icsv.png);
 }
 
 

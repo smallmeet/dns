@@ -1,3 +1,4 @@
+var domain = ""
 d3.textBlock = function () {
 
     var label = "";
@@ -12,7 +13,7 @@ d3.textBlock = function () {
             // first append text to svg:g
 
             var t = element.append("text")
-                .attr("font-size", "12px")
+                .attr("font-size", "14px")
                 .attr("x", 0)
             // .attr("y", "-1em")
 
@@ -39,10 +40,13 @@ d3.textBlock = function () {
             var bb = t[0][0].getBBox();
 
             var className = ""
-            if (labelvar === "NS") {
-                className = "ns"
-            } else if (labelvar === "MX") {
-                className = "mx"
+            var reg_format = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])(\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])){3}$/
+            if (labelvar === domain) {
+                className = "domain"
+            } else if (reg_format.test(labelvar)) {
+                className = "ip"
+            } else {
+                className = "child"
             }
             element.append("rect")
                 .attr("x", -5)
@@ -55,7 +59,7 @@ d3.textBlock = function () {
                 .attr("stroke-width", 1);
 
             var t2 = element.append("text")
-                .attr("font-size", "12px")
+                .attr("font-size", "14px")
                 .attr("color", "white")
                 .attr("x", 0)
             // .attr("y", "-1em")
@@ -94,8 +98,9 @@ d3.textBlock = function () {
 }
 
 var tb = d3.textBlock().label(function (d) { return d.name; });
-function domainPaint(root, width, height) {
+function domainPaint(root, width, height, l) {
     root = JSON.parse(root)
+    domain = root.name
 
     var totalNodes = 0;
     var maxLabelLength = 0;
@@ -216,7 +221,7 @@ function domainPaint(root, width, height) {
     }
 
     var svgGroup = baseSvg.append("g")
-    .attr("transform", "translate(350,20)")
+    .attr("transform", "translate(" + (viewerWidth / 2 - (350 + l) / 2) + ",20)")
 
     root.x0 = viewerHeight / 2;
     root.y0 = 0;

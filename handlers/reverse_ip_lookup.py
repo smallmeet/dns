@@ -7,7 +7,7 @@ import traceback
 import datetime
 
 from handlers.base import BaseHandler
-from utils import utils
+from utils import misc
 from utils.config import db, config, redis_cursor
 
 pre_system = config.pre_system
@@ -60,8 +60,8 @@ def add_new_task_state(task_id, target_ip):
                     (%s, %s, %s, %s, %s)''',
                   task_id,
                   target_ip,
-                  utils.now(),
-                  utils.original_time(),
+                  misc.now(),
+                  misc.original_time(),
                   '0')
     except Exception as e:
         logging.error('添加任务状态失败')

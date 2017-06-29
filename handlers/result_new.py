@@ -7,10 +7,9 @@ import traceback
 import tornado.web
 
 from handlers.base import BaseHandler
-from models import DBSession, User, TaskRecords, Domain
 from service import TaskRecordService, UserService, RootDomainService
 from utils.config import config, pre_system, redis_cursor
-from utils import utils
+from utils import misc
 
 project_name = config.project_name
 task_next_id_key = project_name + '__sp'
@@ -24,9 +23,9 @@ class ResultNewHandler(BaseHandler):
 
     def __init__(self, application, request, **kwargs):
         super(ResultNewHandler, self).__init__(application, request, **kwargs)
-        self.user_service = UserService()
-        self.domain_service = RootDomainService()
-        self.task_record_service = TaskRecordService()
+        self.user_service = UserService(self.db)
+        self.domain_service = RootDomainService(self.db)
+        self.task_record_service = TaskRecordService(self.db)
 
     @tornado.web.authenticated
     def get(self, *args, **kwargs):
@@ -38,13 +37,13 @@ class ResultNewHandler(BaseHandler):
 
         # 取参数
         target_domain = self.get_argument('content', '')
-        dictionary = utils.str2bool(self.get_argument('dictionary', 'false'))
+        dictionary = misc.str2bool(self.get_argument('dictionary', 'false'))
 
 
         # 处理域名
-        target_domain = utils.parse_domain_simple(target_domain)
+        target_domain = misc.parse_domain_simple(target_domain)
         logging.debug('target domain is: ' + target_domain)
-        if not utils.is_valid_domain(target_domain):
+        if not misc.is_valid_domain(target_domain):
             self.redirect('/search_new')
             return
 
@@ -60,7 +59,7 @@ class ResultNewHandler(BaseHandler):
                 'type': 'search_domain',
                 'is_brute': int(dictionary)
             }
-            TaskRecordService().create_task(task_params)
+            TaskRecordService(self.db).create_task(task_params)
             logging.debug('创建任务 over.')
         elif 0 == task_state:
             logging.debug('正在排队')
@@ -73,10 +72,17 @@ class ResultNewHandler(BaseHandler):
 
 class ReverseIpLookUpNewHandler(BaseHandler):
 
+    def __init__(self, application, request, **kwargs):
+        super(ReverseIpLookUpNewHandler, self).__init__(application, request, **kwargs)
+        self.user_service = UserService(self.db)
+
     @tornado.web.authenticated
     def get(self, *args, **kwargs):
         ip = self.get_argument('ip', '')
-        self.render('ip.html', ip=ip)
+
+        current_username = self.get_secure_cookie(pre_system + 'username')
+
+        self.render('ip.html', ip=ip, username=current_username)
 
 
 class ChartHandler(BaseHandler):

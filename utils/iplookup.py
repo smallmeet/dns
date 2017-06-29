@@ -8,7 +8,7 @@ import logging
 import traceback
 
 import requests
-import utils
+import misc
 
 
 # class IpAddress(object):
@@ -37,7 +37,7 @@ requests_settings = {
 
 
 def query(ip):
-    if not utils.is_valid_ip(ip):
+    if not misc.is_valid_ip(ip):
         return None
     api_url = 'http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json&ip={0}'
     url = api_url.format(ip)

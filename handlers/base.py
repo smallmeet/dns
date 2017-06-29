@@ -4,6 +4,7 @@
 import sys
 import re
 import tornado.web
+from tornado.websocket import WebSocketHandler
 
 sys.path.append('../')
 from utils import config
@@ -51,3 +52,21 @@ class BaseHandler(tornado.web.RequestHandler):
         #     self.render('templates/error/500.html')
         # super(BaseHandler, self).write_error(status_code, **kwargs)
         pass
+
+    @property
+    def db(self):
+        return self.application.db
+
+
+
+class BaseWebSocketHandler(WebSocketHandler):
+
+    def data_received(self, chunk):
+        pass
+
+    def on_message(self, message):
+        raise NotImplemented
+
+    @property
+    def db(self):
+        return self.application.db

@@ -28,21 +28,24 @@ d3.textBlock = function () {
     var label = "";
 
     function my(selection) {
+        console.log('fuck')
         selection.each(function (d, i) {
             var labelvar = (typeof (label) === "function" ? label(d) : label);
 
             var element = d3.select(this);
 
             var strs = labelvar.split(" ")
+            var el = []
+            strs.length > 1 ? el.push(strs[0], strs.slice(1)) : el = strs
             // first append text to svg:g
-            
+
             var t = element.append("text")
                 .attr("font-size", "12px")
                 .attr("x", 0)
                 // .attr("y", "-1em")
 
-            
-            if(strs.length === 1) {
+
+            if(el.length === 1) {
                 t.text(labelvar)
                 .attr("y", "0")
                 .attr("fill", "white")
@@ -50,7 +53,7 @@ d3.textBlock = function () {
             } else {
                 t.attr("y", "-1em")
                 t.selectAll("tspan")
-                    .data(strs)
+                    .data(el)
                     .enter()
                     .append("tspan")
                     .attr("x", "0")
@@ -60,19 +63,23 @@ d3.textBlock = function () {
                         return d;
                     });
             }
-            
+
             var bb = t[0][0].getBBox();
 
             var className = ""
             if(labelvar === "NS") {
-                className = "ns"
+                className = "domain"
             } else if(labelvar === "MX") {
-                className = "mx"
+                className = "ip"
+            } else if(labelvar === "site") {
+                className = "site"
+            } else {
+                className = "child"
             }
             element.append("rect")
-                .attr("x", -5) 
-                .attr("y", - bb.height * 0.75) 
-                .attr("width", bb.width + 10) 
+                .attr("x", -5)
+                .attr("y", - bb.height * 0.75)
+                .attr("width", bb.width + 10)
                 .attr("height", bb.height * 1.5)
                 .attr("class", className)
                 .attr("fill", "steelblue")
@@ -85,7 +92,7 @@ d3.textBlock = function () {
                 .attr("x", 0)
                 // .attr("y", "-1em")
 
-            if(strs.length === 1) {
+            if(el.length === 1) {
                 t2.text(labelvar)
                     .attr("y", "0")
                     .attr("fill", "white")
@@ -93,7 +100,7 @@ d3.textBlock = function () {
             } else {
                 t2.attr("y", "-1em")
                 t2.selectAll("tspan")
-                    .data(strs)
+                    .data(el)
                     .enter()
                     .append("tspan")
                     .attr("x", "0")

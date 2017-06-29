@@ -99,14 +99,27 @@
                                 <input type="text" class="form-control" id="filter_text" placeholder="输入域名允许的字符">
                                 <div class="input-group-addon filter complete" disabled><i class="fa fa-eraser"></i> 筛选</div>
                             </div>
-                            <div class="table-responsive table2excel" style="text-align: left;">
-                                <table class="table domain" style="font-size: 1.1em; border-color: #777;">
+                            <div class="table-responsive" style="text-align: left;">
+                                <table class="table domain table-export" style="font-size: 1.1em; border-color: #777;">
                                     <thead>
                                         <tr>
                                             <th>域名</th>
                                             <th>检测时间</th>
                                             <th>IP</th>
-                                            <th>状态 <span id="domain-status" class="label label-primary" data-toggle="tooltip" title="切换状态"><i class="fa  fa-unsorted"></i></span><span class="status-info"> 全部</span></th>
+                                            <!--<th>状态 <span id="domain-status" class="label label-primary" data-toggle="tooltip" title="切换状态"><i class="fa  fa-unsorted"></i></span><span class="status-info"> 全部</span></th>-->
+                                            <th>状态
+                                                <div class="btn-group">
+                                                    <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <span class="status-title">全部</span> <span class="caret"></span>
+                                                    </button>
+                                                    <ul class="dropdown-menu status-menu">
+                                                        <li class="domain-status"><a><i class="fa fa-sort"></i> <span>全部</span></a></li>
+                                                        <li class="domain-status"><a><i class="fa fa-check"></i> <span>正常</span></a></li>
+                                                        <li class="domain-status"><a><i class="fa fa-unlink"></i> <span>无法连接</span></a></li>
+                                                        <li class="domain-status"><a><i class="fa fa-ban"></i> <span>不存在</span></a></li>
+                                                    </ul>
+                                                </div>
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -125,7 +138,10 @@
                                 <h2 class="nofilter">没有匹配的子域名</h2>
                             </div>
                         </div>
-                        <div style="margin: 30px;" align="center"><button id="download" type="button" class="btn btn-default"><i class="fa fa-cloud-download" aria-hidden="true"></i> 下载子域名列表文件</button></div>
+                        <div style="margin: 30px;" align="center">
+                            <button type="button" data-key="xlsx" class="btn btn-default">下载xlsx</button>
+                            <button type="button" data-key="csv" class="btn btn-default">下载csv</button>
+                        </div>
                         <div style="margin: 30px;" align="center"><button id="chart" type="button" class="btn btn-success"><i class="fa fa-sitemap"></i> 查看子域名关系图</button></div>
                         <!--<p class=title>子域名关系图</p>
                         <div id="tree_domain_svg"></div>-->
@@ -219,6 +235,8 @@
     <script src="./js/jquery.min.js"></script>
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/myalert.js"></script>
+    <script src="./js/xlsx.core.min.js"></script>
+    <script src="./js/FileSaver.min.js"></script>
     <script src="./js/table2excel.js"></script>
     <script src="./js/jquery-jvectormap-2.0.3.min.js"></script>
     <script src="./js/jquery-jvectormap-world-mill-en.js"></script>

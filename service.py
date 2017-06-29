@@ -1,24 +1,27 @@
 #!/usr/bin/env python 
 # -*- coding: utf-8 -*-
 """ create at 14/06/2017 """
-import logging
-import traceback
-from lxml import etree
 
-import requests
-
-from utils import utils
-from utils.reverse_ip_lookup import ReverseIpLookUp
 
 __author__ = 'binbin'
 
+import sys
 import datetime
-from models import db_session, DBSession, Domain, TaskRecords, User, SubDomainResult
+import logging
+import traceback
+import requests
+
+from lxml import etree
+
+from models import Domain, TaskRecords, User, SubDomainResult
 from models import SystemDomains
 from models import SystemIps
 from models import SystemEvents
 import json
+sys.path.append('../')
 
+from utils import misc
+from utils.reverse_ip_lookup import ReverseIpLookUp
 from utils.config import config, redis_cursor
 
 project_name = config.project_name
@@ -28,69 +31,75 @@ task_queue_key = project_name + '__task_queue'
 task_detail_key_prefix = project_name + '__task_detail_'
 
 
-class PortScanEventService():
+class BaseService(object):
 
-    def __init__(self):
-        '''
+    def __init__(self, db):
+        super(BaseService, self).__init__()
+        self.db = db
+
+
+class PortScanEventService(BaseService):
+
+    def __init__(self, db):
+        """
         这个用来获取端口扫描信息的service类
         :return:
-        '''
-
+        """
+        super(PortScanEventService, self).__init__(db)
         self.MIN_SYNC_TIME_DELAY = datetime.timedelta(hours=6)
 
     def fetch_wait_events(self):
-        session = DBSession()
-        res = session.query(SystemEvents).filter(SystemEvents.state < 2).all()
-        session.close()
+        res = self.db.query(SystemEvents).filter(SystemEvents.state < 2).all()
+        self.db.close()
         if not res:
             return []
         return res
 
     def _get_min_sync_time(self):
-        '''
+        """
         获取最早能够接受的同步时间,再早的就不需要了,重新爬
         :return:
-        '''
+        """
         return datetime.datetime.now() - self.MIN_SYNC_TIME_DELAY
 
     def sync_ip_web_info(self,ip,web_info):
-        ip_info = db_session.query(SystemIps).filter(SystemIps.ip == SystemIps.ip_to_int(ip)).first()
+        ip_info = self.db.query(SystemIps).filter(SystemIps.ip == SystemIps.ip_to_int(ip)).first()
         if not ip_info:
             ip_info = SystemIps(ip=ip,web_info=web_info,create_time = datetime.datetime.now())
         else:
             ip_info.web_info = web_info
 
-        db_session.add(ip_info)
-        db_session.commit()
+        self.db.add(ip_info)
+        self.db.commit()
 
     def sync_ip_port_info(self,ip,port_info):
-        ip_info = db_session.query(SystemIps).filter(SystemIps.ip == SystemIps.ip_to_int(ip)).first()
+        ip_info = self.db.query(SystemIps).filter(SystemIps.ip == SystemIps.ip_to_int(ip)).first()
         if not ip_info:
             ip_info = SystemIps(ip=ip,port_info=port_info,create_time = datetime.datetime.now())
         else:
             ip_info.port_info = port_info
 
-        db_session.add(ip_info)
-        db_session.commit()
+        self.db.add(ip_info)
+        self.db.commit()
 
     def sync_cms_info(self,domain,cms_info):
-        domain_info = db_session.query(SystemDomains).filter(SystemDomains.domain == domain).first()
+        domain_info = self.db.query(SystemDomains).filter(SystemDomains.domain == domain).first()
         if not domain_info:
             domain_info = SystemDomains(domain=domain,cms=cms_info,create_time=datetime.datetime.now())
         else:
             domain_info.cms = cms_info
 
-        db_session.add(domain_info)
-        db_session.commit()
+        self.db.add(domain_info)
+        self.db.commit()
 
     def get_info_by_id(self,_eventid):
-        system_event = db_session.query(SystemEvents).filter(SystemEvents.id == _eventid).first()
+        system_event = self.db.query(SystemEvents).filter(SystemEvents.id == _eventid).first()
         if not system_event:
             return None
 
         result = {}
 
-        domain_info = db_session.query(SystemDomains).filter(SystemDomains.domain == system_event.domain).first()
+        domain_info = self.db.query(SystemDomains).filter(SystemDomains.domain == system_event.domain).first()
 
         if domain_info:
             if not domain_info.cms:
@@ -98,7 +107,7 @@ class PortScanEventService():
             result['domain_info']={'domain':domain_info.domain,'cms':json.loads(domain_info.cms),'sync_time':domain_info.sync_time.strftime("%Y-%m-%d-%H")}
 
 
-        ip_info = db_session.query(SystemIps).filter(SystemIps.ip == system_event.ip).first()
+        ip_info = self.db.query(SystemIps).filter(SystemIps.ip == system_event.ip).first()
 
         if ip_info:
             if not ip_info.web_info:
@@ -106,21 +115,23 @@ class PortScanEventService():
 
             result['ip_info'] = {'ip':{'ip':ip_info.get_ip(),'web_info':json.loads(ip_info.web_info),'port_info':ip_info.port_info}}
 
+        self.db.close()
         return result
 
     def get_info_recently(self,_ip,_domain):
-        '''
+        """
         获取域名信息和ip信息,注意这里我需要指定最小sync时间
         :param _ip:
         :param _domain:
         :return:
-        '''
+        """
         min_sync_time = self._get_min_sync_time()
 
         result = {}
 
-        domain_info = db_session.query(SystemDomains).filter(SystemDomains.sync_time > min_sync_time).filter(SystemDomains.domain == _domain).first()
-        ip_info = db_session.query(SystemIps).filter(SystemIps.ip == _ip).filter(SystemIps.ip == _ip).first()
+        domain_info = self.db.query(SystemDomains).filter(SystemDomains.sync_time > min_sync_time).filter(SystemDomains.domain == _domain).first()
+        ip_info = self.db.query(SystemIps).filter(SystemIps.ip == _ip).filter(SystemIps.ip == _ip).first()
+        self.db.close()
 
         if not domain_info or not ip_info:
             return None
@@ -137,85 +148,77 @@ class PortScanEventService():
         return result
 
     def finish_event(self,_eventid,state):
-        system_event = db_session.query(SystemEvents).filter(SystemEvents.id == _eventid).first()
+        system_event = self.db.query(SystemEvents).filter(SystemEvents.id == _eventid).first()
         if not system_event:
             return
 
         system_event.state = state
         system_event.finish_time = datetime.datetime.now()
-        db_session.add(system_event)
+        self.db.add(system_event)
 
         ip = system_event.get_ip()
         domain = system_event.domain
 
-        domain_info = db_session.query(SystemDomains).filter(SystemDomains.domain == domain).first()
+        domain_info = self.db.query(SystemDomains).filter(SystemDomains.domain == domain).first()
         if domain_info:
             domain_info.sync_time = datetime.datetime.now()
-            db_session.add(domain_info)
-        ip_info = db_session.query(SystemIps).filter(SystemIps.ip == ip).first()
+            self.db.add(domain_info)
+        ip_info = self.db.query(SystemIps).filter(SystemIps.ip == ip).first()
         if ip_info:
             ip_info.sync_time = datetime.datetime.now()
-            db_session.add(ip_info)
+            self.db.add(ip_info)
 
-        db_session.commit()
+        self.db.commit()
 
         # TODO 通过websocket通知获取信息
 
     def create_event(self,_ip,_domain):
-        '''
+        """
         创建一个事件
         :return:
-        '''
+        """
         now = datetime.datetime.now()
         system_events = SystemEvents(ip=_ip,domain=_domain,state=0,type_id=3,create_time=now,is_delete=0)
-        db_session.add(system_events)
-        db_session.commit()
+        self.db.add(system_events)
+        self.db.commit()
 
 
-class RootDomainService(object):
+class RootDomainService(BaseService):
     """根域名 Service"""
 
     def create_domain(self, domain):
-        session = DBSession()
-        domain_query_runner = session.query(Domain).filter(Domain.domain == domain)
+        domain_query_runner = self.db.query(Domain).filter(Domain.domain == domain)
         if domain_query_runner.count() == 0:
             domain_entity = Domain(domain=domain)
-            session.add(domain_entity)
-            session.commit()
-        session.close()
+            self.db.add(domain_entity)
+            self.db.commit()
 
 
-class UserService(object):
+class UserService(BaseService):
     """用户 Service"""
 
     def get_user(self, username):
-        session = DBSession()
-        target_user_entity = session.query(User).filter(User.username == username).one_or_none()
-        session.close()
+        target_user_entity = self.db.query(User).filter(User.username == username).one_or_none()
+        self.db.close()
         return target_user_entity
 
     def save(self, user_entity):
         if isinstance(user_entity, UserService):
-            session = DBSession()
-            session.add(user_entity)
-            session.commit()
-            session.close()
+            self.db.add(user_entity)
+            self.db.commit()
 
-class TaskRecordService(object):
+
+class TaskRecordService(BaseService):
     """任务 Service"""
 
     def create_task(self, task_params):
         """创建任务, 并推入队列"""
-        session = DBSession()
+        new_task_entity = TaskRecords(keywords=task_params['keywords'], create_time=misc.now(),
+                                      finish_time=misc.original_time())
+        self.db.add(new_task_entity)
+        self.db.commit()
 
-        new_task_entity = TaskRecords(keywords=task_params['keywords'], create_time=utils.now(),
-                                      finish_time=utils.original_time())
-        session.add(new_task_entity)
-        session.commit()
-        session.close()
-
-        session = DBSession()
-        new_task_entity = session.query(TaskRecords)\
+        new_task_entity = self.db.query(TaskRecords)\
             .filter(TaskRecords.keywords == task_params['keywords'])\
             .order_by(TaskRecords.id.desc())\
             .limit(1)\
@@ -223,8 +226,7 @@ class TaskRecordService(object):
         new_task_id = new_task_entity.id
 
         self.push_task(new_task_id, task_params)
-
-        session.close()
+        self.db.close()
 
     def push_task(self, new_task_id, task_params):
         """将任务 push 到队列"""
@@ -242,24 +244,37 @@ class TaskRecordService(object):
         return False
 
     def get_task_state(self, keywords):
-        session = DBSession()
-        target_task_entity = session.query(TaskRecords).filter(TaskRecords.keywords == keywords)\
+        target_task_entity = self.db.query(TaskRecords).filter(TaskRecords.keywords == keywords)\
             .limit(1).one_or_none()
-        session.close()
+        self.db.close()
 
         if target_task_entity is None:
             return -1
         return target_task_entity.state
 
 
-class ReverseIpService(object):
+class ReverseIpService(BaseService):
+
+    @staticmethod
+    def try_decode(content):
+        try:
+            return unicode(content, 'gb2312')
+        except UnicodeDecodeError:
+            pass
+        try:
+            return unicode(content, 'gbk')
+        except UnicodeDecodeError:
+            pass
+        try:
+            return unicode(content, 'gb18030')
+        except UnicodeDecodeError:
+            pass
+        return ''
 
     def reverse_ip(self, ip):
         reverse_ip_data = ReverseIpLookUp(ip).run()
 
-        session = DBSession()
-        sub_domain_results = session.query(SubDomainResult).filter(SubDomainResult.ip.like('%{}%'.format(ip))).all()
-        session.close()
+        sub_domain_results = self.db.query(SubDomainResult).filter(SubDomainResult.ip.like('%{}%'.format(ip))).all()
 
         for i in sub_domain_results:
             for j in reverse_ip_data[ip]:
@@ -268,8 +283,12 @@ class ReverseIpService(object):
             try:
                 url = 'http://{}'.format(i.subdomain)
                 resp = requests.get(url)
-                resp.encoding = 'utf-8'
-                root = etree.HTML(resp.text)
+                content_bytes = resp.content
+                if resp.encoding.lower() != 'utf-8':
+                    html = self.try_decode(content_bytes)
+                else:
+                    html = resp.text
+                root = etree.HTML(html)
                 titles = root.xpath('.//title/text()')
                 title = titles[0] if titles else ''
                 print(title)
@@ -280,6 +299,7 @@ class ReverseIpService(object):
                 })
             except Exception as e:
                 pass
+        self.db.close()
         # utils.remove_repeat_domain(reverse_ip_data[ip])
         return reverse_ip_data
 

@@ -13,7 +13,7 @@ import hashlib
 import datetime
 import json
 
-from utils.utils import md5
+from utils.misc import md5
 
 sys.path.append('../')
 from utils import config

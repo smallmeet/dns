@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import logging
 import requests
-import utils
+import misc
 from config import config
 
 
@@ -32,13 +32,17 @@ class ReverseIpLookUp(object):
 
         # 单个 Ip
         else:
-            result_list = requests.get(url.format(self.target_ip)).json()['data']
-            result_json[self.target_ip] = result_list
-            if self.on_progress:
-                self.on_progress({
-                    'ip': self.target_ip,
-                    'data': result_list
-                })
+            try:
+                result_list = requests.get(url.format(self.target_ip)).json()['data']
+                result_json[self.target_ip] = result_list
+                if self.on_progress:
+                    self.on_progress({
+                        'ip': self.target_ip,
+                        'data': result_list
+                    })
+            except Exception as e:
+                result_json[self.target_ip] = []
+                pass
         return result_json
 
 

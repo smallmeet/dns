@@ -45,6 +45,8 @@ ADD UNIQUE INDEX `username_UNIQUE` (`username` ASC);
 LOCK TABLES `system_admin_user` WRITE;
 /*!40000 ALTER TABLE `system_admin_user` DISABLE KEYS */;
 INSERT INTO `system_admin_user` VALUES (1,1,'admin','21232f297a57a5a743894a0e4a801fc3','2017-04-20 13:42:38','2017-04-20 13:42:38',NULL, '', ''),(2,0,'root','63a9f0ea7bb98050796b649e85481845','2017-04-20 13:42:38','2017-04-20 13:42:38',NULL,'', ''),(3,2,'tom','34b7da764b21d298ef307d04d8152dc5','2017-04-20 13:42:38','2017-04-20 13:42:38',NULL,'', '');
+insert into `system_admin_user` values (NULL, '2', 'test1', md5('admin'), now(), now(), '', '', '');
+insert into `system_admin_user` values (NULL, '2', 'test2', md5('admin'), now(), now(), '', '', '');
 /*!40000 ALTER TABLE `system_admin_user` ENABLE KEYS */;
 UNLOCK TABLES;
 

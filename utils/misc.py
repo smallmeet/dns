@@ -10,6 +10,7 @@ import socket
 import sys
 import types
 import uuid
+from time import clock, time
 from urlparse import urlparse
 
 import requests

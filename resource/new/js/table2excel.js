@@ -1,183 +1,229 @@
-/*
- *  jQuery table2excel - v1.0.2
- *  jQuery plugin to export an .xls file in browser from an HTML table
- *  https://github.com/rainabba/jquery-table2excel
- *
- *  Made by rainabba
- *  Under MIT License
+/*!
+ * TableExport.js v3.2.0 (http://www.clarketravis.com)
+ * Copyright 2015 Travis Clarke
+ * Licensed under the MIT license
  */
-//table2excel.js
-;(function ( $, window, document, undefined ) {
-	var pluginName = "table2excel",
 
-	defaults = {
-		exclude: ".noExl",
-    			name: "Table2Excel"
-	};
+;(function (window, undefined) {
 
-	// The actual plugin constructor
-	function Plugin ( element, options ) {
-			this.element = element;
-			// jQuery has an extend method which merges the contents of two or
-			// more objects, storing the result in the first object. The first object
-			// is generally empty as we don't want to alter the default options for
-			// future instances of the plugin
-			//
-			this.settings = $.extend( {}, defaults, options );
-			this._defaults = defaults;
-			this._name = pluginName;
-			this.init();
-	}
+    /*--- GLOBALS ---*/
+    var $ = window.jQuery;
 
-	Plugin.prototype = {
-		init: function () {
-			var e = this;
+    $.fn.tableExport = function (options) {
+            rowD = $.fn.tableExport.rowDel
 
-			e.template = {
-				head: "<html xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:x=\"urn:schemas-microsoft-com:office:excel\" xmlns=\"http://www.w3.org/TR/REC-html40\"><head><meta charset=\"UTF-8\"><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets>",
-				sheet: {
-					head: "<x:ExcelWorksheet><x:Name>",
-					tail: "</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet>"
-				},
-				mid: "</x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body>",
-				table: {
-					head: "<table>",
-					tail: "</table>"
-				},
-				foot: "</body></html>"
-			};
+            exporters = {
+                xlsx: function (rDel, name, $rows) {
+                    var dataURL = $rows.map(function (i, val) {
+                            var $cols = $(val).find('th, td');
+                            return [$cols.map(function (i, val) {
+                                return $(val).text();
+                            }).get()];
+                        }).get(),
+                        dataObject = escapeHtml(
+                            JSON.stringify({
+                                data: dataURL,
+                                fileName: name,
+                                mimeType: $.fn.tableExport.xlsx.mimeType,
+                                fileExtension: $.fn.tableExport.xlsx.fileExtension
+                            }))
+                        return dataObject
+                },
+                xls: function (rdel, name, $rows) {
+                    var colD = $.fn.tableExport.xls.separator,
+                        dataURL = $rows.map(function (i, val) {
+                            var $cols = $(val).find('th, td');
+                            return $cols.map(function (i, val) {
+                                return $(val).text();
+                            }).get().join(colD);
+                        }).get().join(rdel),
+                        dataObject = escapeHtml(
+                            JSON.stringify({
+                                data: dataURL,
+                                fileName: name,
+                                mimeType: $.fn.tableExport.xls.mimeType,
+                                fileExtension: $.fn.tableExport.xls.fileExtension
+                            }))
+                        return dataObject
+                },
+                csv: function (rdel, name, $rows) {
+                    var colD = $.fn.tableExport.csv.separator,
+                        dataURL = $rows.map(function (i, val) {
+                            var $cols = $(val).find('th, td');
+                            return $cols.map(function (i, val) {
+                                return $(val).text();
+                            }).get().join(colD);
+                        }).get().join(rdel),
+                        dataObject = escapeHtml(
+                            JSON.stringify({
+                                data: dataURL,
+                                fileName: name,
+                                mimeType: $.fn.tableExport.csv.mimeType,
+                                fileExtension: $.fn.tableExport.csv.fileExtension
+                            }))
+                        return dataObject
+                },
+                txt: function (rdel, name, $rows) {
+                    var colD = $.fn.tableExport.txt.separator,
+                        dataURL = $rows.map(function (i, val) {
+                            var $cols = $(val).find('th, td');
+                            return $cols.map(function (i, val) {
+                                return $(val).text();
+                            }).get().join(colD);
+                        }).get().join(rdel),
+                        dataObject = escapeHtml(
+                            JSON.stringify({
+                                data: dataURL,
+                                fileName: name,
+                                mimeType: $.fn.tableExport.txt.mimeType,
+                                fileExtension: $.fn.tableExport.txt.fileExtension
+                            }))
+                        return dataObject
+                }
+            };
 
-			e.tableRows = [];
+        $("button[data-key]").on("click", function () {
+            var kyodate = new Date();
+            var $el = $(".table-export").clone()
+            $el.find(".btn-group").remove()
+            var $rows =  $el.find('tbody').find('tr'),
+            $rows = $rows.add($el.find('thead>tr')),
+            fileName = "domains_" + kyodate.getFullYear() + "-" + (kyodate.getMonth() + 1) + "-" + kyodate.getDate()
+            var object = JSON.parse(exporters[$(this).attr("data-key")](rowD, fileName, $rows)),
+                data = object.data,
+                fileName = object.fileName,
+                mimeType = object.mimeType,
+                fileExtension = object.fileExtension;
+            // console.log(data)
+            export2file(data, mimeType, fileName, fileExtension);
+        });
+    };
 
-			// get contents of table except for exclude
-			$(e.element).each( function(i,o) {
-				var tempRows = "";
-				$(o).find("tr").not(e.settings.exclude).each(function (i,o) {
-					tempRows += "<tr>" + $(o).html() + "</tr>";
-				});
-				e.tableRows.push(tempRows);
-			});
+    // Define the plugin default properties.
+    $.fn.tableExport.defaults = {
+        headings: true,                             // (Boolean), display table headings (th or td elements) in the <thead>, (default: true)
+        footers: true,                              // (Boolean), display table footers (th or td elements) in the <tfoot>, (default: false)
+        formats: ["xls", "csv", "txt"],             // (String[]), filetype(s) for the export, (default: ["xls", "csv", "txt"])
+        fileName: "id",                             // (id, String), filename for the downloaded file, (default: "id")
+        bootstrap: true,                            // (Boolean), style buttons using bootstrap, (default: true)
+        position: "bottom",                         // (top, bottom), position of the caption element relative to table, (default: "bottom")
+        ignoreRows: null,                           // (Number, Number[]), row indices to exclude from the exported file (default: null)
+        ignoreCols: null                            // (Number, Number[]), column indices to exclude from the exported file (default: null)
+    };
 
-			// exclude img tags
-            if(e.settings.exclude_img) {
-                e.tableRows[0] = exclude_img(e.tableRows[0]);
+    $.fn.tableExport.charset = "charset=utf-8";
+
+    $.fn.tableExport.xlsx = {
+        defaultClass: "xlsx",
+        buttonContent: "Export to xlsx",
+        mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        fileExtension: ".xlsx"
+    };
+
+    $.fn.tableExport.xls = {
+        defaultClass: "xls",
+        buttonContent: "Export to xls",
+        separator: "\t",
+        mimeType: "application/vnd.ms-excel",
+        fileExtension: ".xls"
+    };
+
+    $.fn.tableExport.csv = {
+        defaultClass: "csv",
+        buttonContent: "Export to csv",
+        separator: ",",
+        mimeType: "application/csv",
+        fileExtension: ".csv"
+    };
+
+    $.fn.tableExport.txt = {
+        defaultClass: "txt",
+        buttonContent: "Export to txt",
+        separator: "  ",
+        mimeType: "text/plain",
+        fileExtension: ".txt"
+    };
+
+    $.fn.tableExport.defaultFileName = "myDownload";
+
+    $.fn.tableExport.defaultButton = "button-default";
+
+    $.fn.tableExport.bootstrap = ["btn", "btn-default", "btn-toolbar"];
+
+    $.fn.tableExport.rowDel = "\r\n";
+
+    $.fn.tableExport.entityMap = {"&": "&#38;", "<": "&#60;", ">": "&#62;", "'": '&#39;', "/": '&#47'};
+
+    function escapeHtml(string) {
+        return String(string).replace(/[&<>'\/]/g, function (s) {
+            return $.fn.tableExport.entityMap[s];
+        });
+    }
+
+    function dateNum(v, date1904) {
+        if (date1904) v += 1462;
+        var epoch = Date.parse(v);
+        return (epoch - new Date(Date.UTC(1899, 11, 30))) / (24 * 60 * 60 * 1000);
+    }
+
+    function createSheet(data, opts) {
+        var ws = {};
+        var range = {s: {c: 10000000, r: 10000000}, e: {c: 0, r: 0}};
+        for (var R = 0; R != data.length; ++R) {
+            for (var C = 0; C != data[R].length; ++C) {
+                if (range.s.r > R) range.s.r = R;
+                if (range.s.c > C) range.s.c = C;
+                if (range.e.r < R) range.e.r = R;
+                if (range.e.c < C) range.e.c = C;
+                var cell = {v: data[R][C]};
+                if (cell.v == null) continue;
+                var cell_ref = XLSX.utils.encode_cell({c: C, r: R});
+
+                if (typeof cell.v === 'number') cell.t = 'n';
+                else if (typeof cell.v === 'boolean') cell.t = 'b';
+                else if (cell.v instanceof Date) {
+                    cell.t = 'n';
+                    cell.z = XLSX.SSF._table[14];
+                    cell.v = dateNum(cell.v);
+                }
+                else cell.t = 's';
+
+                ws[cell_ref] = cell;
             }
+        }
+        if (range.s.c < 10000000) ws['!ref'] = XLSX.utils.encode_range(range);
+        return ws;
+    }
 
-            // exclude link tags
-            if(e.settings.exclude_links) {
-                e.tableRows[0] = exclude_links(e.tableRows[0]);
-            }
+    function Workbook() {
+        if (!(this instanceof Workbook)) return new Workbook();
+        this.SheetNames = [];
+        this.Sheets = {};
+    }
 
-            // exclude input tags
-            if(e.settings.exclude_inputs) {
-                e.tableRows[0] = exclude_inputs(e.tableRows[0])
-            }
+    function string2ArrayBuffer(s) {
+        var buf = new ArrayBuffer(s.length);
+        var view = new Uint8Array(buf);
+        for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+        return buf;
+    }
 
-			e.tableToExcel(e.tableRows, e.settings.name);
-		},
+    function export2file(data, mime, name, extension) {
+        if (extension === ".xlsx") {
+            var wb = new Workbook(),
+                ws = createSheet(data);
 
-		tableToExcel: function (table, name) {
-			var e = this, fullTemplate="", i, link, a;
+            wb.SheetNames.push(name);
+            wb.Sheets[name] = ws;
 
-			e.uri = "data:application/vnd.ms-excel;base64,";
-			e.base64 = function (s) {
-				return window.btoa(unescape(encodeURIComponent(s)));
-			};
-			e.format = function (s, c) {
-				return s.replace(/{(\w+)}/g, function (m, p) {
-					return c[p];
-				});
-			};
-			e.ctx = {
-				worksheet: name || "Worksheet",
-				table: table
-			};
+            var wopts = {bookType: 'xlsx', bookSST: false, type: 'binary'},
+                wbout = XLSX.write(wb, wopts);
 
-			fullTemplate= e.template.head;
+            data = string2ArrayBuffer(wbout);
+        }
+        saveAs(new Blob([data],
+            {type: mime + ";" + $.fn.tableExport.charset}),
+            name + extension);
+    }
 
-			if ( $.isArray(table) ) {
-				for (i in table) {
-					//fullTemplate += e.template.sheet.head + "{worksheet" + i + "}" + e.template.sheet.tail;
-					fullTemplate += e.template.sheet.head + "Table" + i + "" + e.template.sheet.tail;
-				}
-			}
-
-			fullTemplate += e.template.mid;
-
-			if ( $.isArray(table) ) {
-				for (i in table) {
-					fullTemplate += e.template.table.head + "{table" + i + "}" + e.template.table.tail;
-				}
-			}
-
-			fullTemplate += e.template.foot;
-
-			for (i in table) {
-				e.ctx["table" + i] = table[i];
-			}
-			delete e.ctx.table;
-
-
-	        if (typeof msie !== "undefined" && msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // If Internet Explorer
-	        {
-	            if (typeof Blob !== "undefined") {
-	                //use blobs if we can
-	                fullTemplate = [fullTemplate];
-	                //convert to array
-	                var blob1 = new Blob(fullTemplate, { type: "text/html" });
-	                window.navigator.msSaveBlob(blob1, getFileName(e.settings) );
-	            } else {
-	                //otherwise use the iframe and save
-	                //requires a blank iframe on page called txtArea1
-	                txtArea1.document.open("text/html", "replace");
-	                txtArea1.document.write(fullTemplate);
-	                txtArea1.document.close();
-	                txtArea1.focus();
-	                sa = txtArea1.document.execCommand("SaveAs", true, getFileName(e.settings) );
-	            }
-
-	        } else {
-	            link = e.uri + e.base64(e.format(fullTemplate, e.ctx));
-				a = document.createElement("a");
-				a.download = getFileName(e.settings);
-				a.href = link;
-				a.click();
-	        }
-
-			return true;
-
-		}
-	};
-
-	function getFileName(settings) {
-		return ( settings.filename ? settings.filename : "table2excel") + ".xlsx";
-	}
-
-	// Removes all img tags
-	function exclude_img(string) {
-		return string.replace(/<img[^>]*>/gi,"");
-	}
-
-	// Removes all link tags
-	function exclude_links(string) {
-		return string.replace(/<A[^>]*>|<\/A>/g, "");
-	}
-
-	// Removes input params
-	function exclude_inputs(string) {
-		return string.replace(/<input[^>]*>|<\/input>/gi, "");
-	}
-
-	$.fn[ pluginName ] = function ( options ) {
-		var e = this;
-			e.each(function() {
-					if ( !$.data( e, "plugin_" + pluginName ) ) {
-							$.data( e, "plugin_" + pluginName, new Plugin( this, options ) );
-					}
-			});
-
-			// chain jQuery functions
-			return e;
-	};
-
-})( jQuery, window, document );
+}(window));

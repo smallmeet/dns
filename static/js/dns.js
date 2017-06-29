@@ -70,7 +70,6 @@ $(function () {
     webSocket.onopen = function (event) {
         console.log('与服务器端建立连接');
         start();
-
         //处理服务器返回的信息
         webSocket.onmessage = function (event) {
             // console.log(event.data)
@@ -86,7 +85,7 @@ $(function () {
                     // console.log(data)
                     ip_his(data)
                     break;
-                case 'sub_domain':   //子域名
+              case 'sub_domain':   //子域名
                     // console.log(JSON.stringify(data))
                     $("#subdomain").css("display", "block")
                     $("#download").css("display", "block")
@@ -312,8 +311,8 @@ $(function () {
 
         var portInfo_temp = `
             <p>IP地址: ${data.ip_info.ip.ip} <a href="${data.ip_info.ip.ip}"><i class="fa fa-external-link" style="color:lightblue;"></i></a></p>
-                    <p>协议: ${data.domain_info.cms ? data.domain_info.cms.cms : ``}</p>
-                    <p>CMS信息: ${data.ip_info.web_info ? data.ip_info.ip.web_info.product : ``}</p>
+                    <p>协议: ${data.ip_info.web_info ? data.ip_info.ip.web_info.product : ``}</p>
+                    <p>CMS信息: ${data.domain_info.cms ? data.domain_info.cms.cms : ``}</p>
                     <p>产品: ${data.ip_info.web_info ? data.ip_info.ip.web_info.name : ``}</p>
                     <p>产品名: ${data.ip_info.web_info ? data.ip_info.ip.web_info.extrainfo : ``}</p>
                     <p>版本号: ${data.ip_info.web_info ? data.ip_info.ip.web_info.version : ``}</p>
@@ -385,7 +384,7 @@ $(function () {
             // console.log(siteObj)
             svgJson.children[2].children.push(siteObj)
         }
-
+        console.log(JSON.stringify(svgJson))
         // console.log(JSON.stringify(svgJson))
         svgPaint(JSON.stringify(svgJson))
     }
@@ -577,6 +576,14 @@ $(function () {
                 break;
         }
     }
+
+    $(document).on('click', '.cursor', function (event) {
+        event.preventDefault();
+
+        $('html, body').animate({
+            scrollTop: $($.attr(this, 'href')).offset().top - 70
+        }, 500);
+    });
 });
 
 

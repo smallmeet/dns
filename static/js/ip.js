@@ -51,7 +51,7 @@ $(document).ready(function () {
                 $(".table-ip").css("display", "none")
                 $(".nodomain").css("display", "block")
             }
-            
+            $(".pageloader3").css("display", "none")
         };
     };
 
